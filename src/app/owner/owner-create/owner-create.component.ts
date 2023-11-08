@@ -8,6 +8,10 @@ import { Owner } from 'src/app/interfaces/owner';
 })
 export class OwnerCreateComponent {
   newOwnerComment = 'type in a comment';
+  dtoOwnerFullname = '';
+  dtoOwnerEmail = '';
+  dtoOwnerAddress = '';
+  dtoOwnerPhone = '';
   dtoOwnerComment = '';
   owner:Owner | undefined;
 

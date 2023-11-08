@@ -1,14 +1,26 @@
-<label for="name">Fullname:</label>
-<input name="name" />
-<label for="email">e-mail:</label>
-<input name="email" />
-<label for="address">Address:</label>
-<input name="address" />
-<label for="phone">Phone:</label>
-<input name="phone" />
-<label for="comments">Comments:</label>
-<textarea name="comments" rows="6" [(ngModel)]="dtoOwnerComment"></textarea>
+<mat-card>
+  <mat-form-field>
+    <mat-label>Fullname:</mat-label>
+    <input matInput name="fullname" [(ngModel)]="dtoOwnerFullname" />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>E-mail:</mat-label>
+    <input matInput name="email" [(ngModel)]="dtoOwnerEmail" />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Address:</mat-label>
+    <input matInput name="address" [(ngModel)]="dtoOwnerAddress" />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Phone:</mat-label>
+    <input matInput name="phone" [(ngModel)]="dtoOwnerPhone" />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Comments:</mat-label>
+    <textarea matInput name="comments" rows="6" [(ngModel)]="dtoOwnerComment"></textarea>
+  </mat-form-field>
+  <button mat-raised-button color="accent" (click)="onCreateOwner()">Save</button>
+</mat-card>
 <hr>
-<button (click)="onCreateOwner()">Save</button>
 <hr>
 <p>{{ newOwnerComment }}</p>
