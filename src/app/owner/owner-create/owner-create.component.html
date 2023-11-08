@@ -7,6 +7,8 @@
 <label for="phone">Phone:</label>
 <input name="phone" />
 <label for="comments">Comments:</label>
-<textarea name="comments" rows="6"></textarea>
+<textarea name="comments" rows="6" [(ngModel)]="dtoOwnerComment"></textarea>
 <hr>
 <button (click)="onCreateOwner()">Save</button>
+<hr>
+<p>{{ newOwnerComment }}</p>

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Owner } from 'src/app/interfaces/owner';
 
 @Component({
   selector: 'app-owner-create',
@@ -6,9 +7,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./owner-create.component.css']
 })
 export class OwnerCreateComponent {
-  onCreateOwner() {
-    
+  newOwnerComment = 'type in a comment';
+  dtoOwnerComment = '';
+  owner:Owner | undefined;
 
-    alert('Owner is supposedly created!');
+  onCreateOwner() {
+
+    this.newOwnerComment = this.dtoOwnerComment;
+    
   }
 }
