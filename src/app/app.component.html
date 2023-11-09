@@ -1,4 +1,5 @@
 <app-header></app-header>
 <main>
-  <app-owner-create></app-owner-create>
+  <app-owner-create (ownerCreated)="onOwnerAdded($event)" ></app-owner-create>
+  <app-owner-list [owners]="ownersMaster" ></app-owner-list>
 </main>

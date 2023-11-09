@@ -6,16 +6,19 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule  } from '@angular/material/toolbar'
+import { MatExpansionModule } from '@angular/material/expansion'
 
 import { AppComponent } from './app.component';
 import { OwnerCreateComponent } from './owner/owner-create/owner-create.component';
 import { HeaderComponent } from './header/header.component';
+import { OwnerListComponent } from './owner/owner-list/owner-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     OwnerCreateComponent,
-    HeaderComponent
+    HeaderComponent,
+    OwnerListComponent
   ],
   imports: [
     BrowserModule,
@@ -24,7 +27,8 @@ import { HeaderComponent } from './header/header.component';
     MatInputModule,
     MatCardModule,
     MatButtonModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatExpansionModule
   ],
   providers: [],
   bootstrap: [AppComponent]

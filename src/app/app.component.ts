@@ -16,5 +16,9 @@ import { Booking } from './interfaces/booking';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'hbs';
+  ownersMaster:Owner[] = [];
+
+  onOwnerAdded(own:Owner) {
+    this.ownersMaster.push(own);
+  }
 }

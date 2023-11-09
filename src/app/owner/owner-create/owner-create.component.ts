@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { Owner } from 'src/app/interfaces/owner';
 
 @Component({
@@ -8,6 +8,7 @@ import { Owner } from 'src/app/interfaces/owner';
 })
 export class OwnerCreateComponent {
   newOwnerComment = 'type in a comment';
+  dtoOwnerId = 0;
   dtoOwnerFullname = '';
   dtoOwnerEmail = '';
   dtoOwnerAddress = '';
@@ -15,9 +16,14 @@ export class OwnerCreateComponent {
   dtoOwnerComment = '';
   owner:Owner | undefined;
 
+  @Output() ownerCreated = new EventEmitter();
+
   onCreateOwner() {
 
-    this.newOwnerComment = this.dtoOwnerComment;
-    
+    this.dtoOwnerId++;
+    const newOwner = {"id": this.dtoOwnerId, "name": this.dtoOwnerFullname,
+       "email": this.dtoOwnerEmail, "address": this.dtoOwnerAddress,
+       "phone": this.dtoOwnerPhone, "comments": this.dtoOwnerComment };
+    this.ownerCreated.emit(newOwner);
   }
 }
