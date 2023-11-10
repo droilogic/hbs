@@ -1,0 +1,18 @@
+<mat-accordion multi="true" *ngIf="employees.length > 0">
+  <mat-expansion-panel *ngFor="let employee of employees">
+    <mat-expansion-panel-header>
+      {{ employee.name }}
+    </mat-expansion-panel-header>
+    <p>id: {{ employee.id }}</p>
+    <p>email: {{ employee.email }}</p>
+    <p>address: {{ employee.address }}</p>
+    <p>phone: {{ employee.phone }}</p>
+    <p>manager: {{ employee.manager_id }}</p>
+    <p>comments: {{ employee.comments }}</p>
+    <mat-action-row>
+      <button mat-button color="primary">UPDATE</button>
+      <button mat-button color="warn" (click)="onDelete(employee.id)">DELETE</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>
+<p class="info-text mat-body-1" *ngIf="employees.length <= 0">No employees defined</p>

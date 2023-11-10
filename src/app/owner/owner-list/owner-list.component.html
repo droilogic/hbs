@@ -5,6 +5,10 @@
     </mat-expansion-panel-header>
     <p>id: {{ owner.id }}</p>
     <p>email: {{ owner.email }}</p>
+    <mat-action-row>
+      <button mat-button color="primary">UPDATE</button>
+      <button mat-button color="warn">DELETE</button>
+    </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>
 <p class="info-text mat-body-1" *ngIf="owners.length <= 0">No owners defined</p>

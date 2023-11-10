@@ -1,5 +1,8 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
+
 import { Owner } from 'src/app/interfaces/owner';
+import { OwnerService } from '../owner.service';
 
 @Component({
   selector: 'app-owner-create',
@@ -7,23 +10,25 @@ import { Owner } from 'src/app/interfaces/owner';
   styleUrls: ['./owner-create.component.css']
 })
 export class OwnerCreateComponent {
+  dtoOwner: Owner = { id: 0, name: "", email: "", address: "", phone: "", comments: ""};
   newOwnerComment = 'type in a comment';
-  dtoOwnerId = 0;
-  dtoOwnerFullname = '';
-  dtoOwnerEmail = '';
-  dtoOwnerAddress = '';
-  dtoOwnerPhone = '';
-  dtoOwnerComment = '';
+  ownerId = 0;
   owner:Owner | undefined;
 
-  @Output() ownerCreated = new EventEmitter();
+  constructor(public ownerService: OwnerService) {}
 
-  onCreateOwner() {
+  onCreateOwner(form: NgForm) {
 
-    this.dtoOwnerId++;
-    const newOwner = {"id": this.dtoOwnerId, "name": this.dtoOwnerFullname,
-       "email": this.dtoOwnerEmail, "address": this.dtoOwnerAddress,
-       "phone": this.dtoOwnerPhone, "comments": this.dtoOwnerComment };
-    this.ownerCreated.emit(newOwner);
+    if(form.invalid) {
+      return;
+    }
+
+    this.ownerId++;
+    const newOwner = {id: this.ownerId, name: form.value.fullname,
+       email: form.value.email, address: form.value.address,
+       phone: form.value.phone, comments: form.value.comments };
+    this.ownerService.addOwner(newOwner);
+    // clear the form
+    form.resetForm();
   }
 }
