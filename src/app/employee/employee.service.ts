@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -11,7 +12,7 @@ export class EmployeeService {
   private employees: Employee[] = [];
   private employeesUpdated = new Subject<Employee[]>();
 
-  constructor (private http: HttpClient) {}
+  constructor (private http: HttpClient, private router: Router) {}
 
   getEmployees() {
     // no need to unsubscribe; handled by angular itself
@@ -19,7 +20,7 @@ export class EmployeeService {
       msgId: string,
       msgDescr: string,
       data: any
-    }>('http://localhost:3333/api/employees')
+    }>("http://localhost:3333/api/employees")
     .pipe(map((empData) => {
       return empData.data.map(emp => {
         return {
@@ -39,6 +40,15 @@ export class EmployeeService {
     });
   }
 
+  getEmployeeById(empid: string) {
+    // return {...this.employees.find(emp => emp.id === empid) }
+    return this.http.get<{
+      msgId: string,
+      msgDescr: string,
+      data: any
+    }>("http://localhost:3333/api/employees/" + empid);
+  }
+
   getEmployeeUpdateListener() {
     return this.employeesUpdated.asObservable();
   }
@@ -48,13 +58,33 @@ export class EmployeeService {
       msgId: string,
       msgDescr: string,
       data: string
-    }>('http://localhost:3333/api/employees', emp).subscribe((empData) => {
+    }>("http://localhost:3333/api/employees", emp).subscribe((empData) => {
       console.log(empData.msgDescr);
 
       // push to local storage on success only
       emp.id = empData.data;
       this.employees.push(emp);
       this.employeesUpdated.next([...this.employees]);
+      // using angular router to navigate to another page
+      this.router.navigate(["/emp-list"]);
+    });
+  }
+
+  updateEmployee(emp: Employee) {
+    this.http.put<{
+      msgId: string,
+      msgDescr: string,
+      data: string
+    }>("http://localhost:3333/api/employees/" + emp.id, emp).subscribe(empData => {
+      console.log(empData);
+
+      // update local storage on success only
+      const updatedEmployees = [...this.employees];
+      const oldEmployeeIdx = updatedEmployees.findIndex(e => e.id === emp.id);
+      updatedEmployees[oldEmployeeIdx] = emp;
+      this.employees = updatedEmployees;
+      this.employeesUpdated.next([...this.employees]);
+      this.router.navigate(["/emp-list"]);
     });
   }
 

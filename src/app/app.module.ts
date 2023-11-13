@@ -6,10 +6,14 @@ import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { MatToolbarModule  } from '@angular/material/toolbar'
-import { MatExpansionModule } from '@angular/material/expansion'
+import { MatToolbarModule  } from '@angular/material/toolbar';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
 import { OwnerCreateComponent } from './owner/owner-create/owner-create.component';
 import { HeaderComponent } from './header/header.component';
 import { OwnerListComponent } from './owner/owner-list/owner-list.component';
@@ -27,6 +31,7 @@ import { EmployeeListComponent } from './employee/employee-list/employee-list.co
   ],
   imports: [
     BrowserModule,
+    AppRoutingModule,
     FormsModule,
     BrowserAnimationsModule,
     HttpClientModule,
@@ -34,7 +39,10 @@ import { EmployeeListComponent } from './employee/employee-list/employee-list.co
     MatCardModule,
     MatButtonModule,
     MatToolbarModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatMenuModule,
+    MatIconModule,
+    MatProgressSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,2 +1,48 @@
-<mat-toolbar color="primary">HBS</mat-toolbar>
+<mat-toolbar color="primary">
+  <!-- <span><a routerLink="/">HBS</a></span>
+  <span class="menu-spacer"></span>
+  <ul>
+    <li>
+      <a mat-button routerLink="/create" routerLinkActive="mat-accent">New Employee</a>
+    </li>
+  </ul> -->
+
+  <button mat-icon-button [matMenuTriggerFor]="staff"><mat-icon>more_vert</mat-icon><span>HBS</span></button>
+  <mat-menu #staff="matMenu">
+    <button mat-menu-item [matMenuTriggerFor]="managers">Managers</button>
+    <button mat-menu-item [matMenuTriggerFor]="employees">Employees</button>
+    <button mat-menu-item [matMenuTriggerFor]="employees">Guests</button>
+    <button mat-menu-item [matMenuTriggerFor]="employees">Countries</button>
+    <hr>
+    <button mat-menu-item [matMenuTriggerFor]="employees">Hotels</button>
+    <button mat-menu-item [matMenuTriggerFor]="employees">Rooms</button>
+    <button mat-menu-item [matMenuTriggerFor]="employees">Room Classes</button>
+    <hr>
+    <button mat-menu-item [matMenuTriggerFor]="employees">Bookings</button>
+  </mat-menu>
+
+  <mat-menu #managers="matMenu">
+    <ul>
+      <li>
+        <a mat-button routerLink="/mgr-list" routerLinkActive="mat-accent">Managers List</a>
+      </li>
+      <li>
+        <a mat-button routerLink="/mgr-create" routerLinkActive="mat-accent">New Manager</a>
+      </li>
+    </ul>
+  </mat-menu>
+  
+  <mat-menu #employees="matMenu">
+    <ul>
+      <li>
+        <a mat-button routerLink="/emp-list" routerLinkActive="mat-accent">Employees List</a>
+      </li>
+      <li>
+        <a mat-button routerLink="/emp-create" routerLinkActive="mat-accent">New Employee</a>
+      </li>
+    </ul>
+  </mat-menu>
+  
+
+</mat-toolbar>
 

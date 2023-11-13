@@ -1,4 +1,6 @@
-<mat-accordion multi="true" *ngIf="employees.length > 0">
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+
+<mat-accordion multi="true" *ngIf="employees.length > 0 && !isLoading">
   <mat-expansion-panel *ngFor="let employee of employees">
     <mat-expansion-panel-header>
       {{ employee.name }}
@@ -10,9 +12,9 @@
     <p>manager: {{ employee.manager_id }}</p>
     <p>comments: {{ employee.comments }}</p>
     <mat-action-row>
-      <button mat-button color="primary">UPDATE</button>
+      <a mat-button color="primary" [routerLink]="['/emp-edit', employee.id]" >UPDATE</a>
       <button mat-button color="warn" (click)="onDelete(employee.id)">DELETE</button>
     </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>
-<p class="info-text mat-body-1" *ngIf="employees.length <= 0">No employees defined</p>
+<p class="info-text mat-body-1" *ngIf="employees.length <= 0 && !isLoading">No employees defined</p>

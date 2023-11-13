@@ -25,14 +25,21 @@ const onError = error => {
   const bind = typeof port === "string" ? "pipe " + port : "port " + port;
   switch (error.code) {
     case "EACCES":
+      // permission denied
       console.error(bind + " requires elevated privileges; aborting.");
       process.exit(1);
       break;
     case "EADDRINUSE":
+      // resource already in use
       console.error(bind + " is already in use; aborting.");
       process.exit(1);
       break;
-    default:
+      case "ECONNRESET":
+        // connection reset by peer
+        console.error("connection " + bind + " reset by peer; aborting.");
+        process.exit(1);
+        break;
+      default:
       throw error;
   }
 };

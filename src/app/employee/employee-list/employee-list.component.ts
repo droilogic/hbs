@@ -12,12 +12,15 @@ import { EmployeeService } from '../employee.service';
 export class EmployeeListComponent implements OnInit, OnDestroy {
   private employeeSubscription: Subscription;
   employees: Employee[] = [];
+  isLoading = false;
 
   constructor(public employeeService: EmployeeService) {}
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.employeeService.getEmployees();
     this.employeeSubscription = this.employeeService.getEmployeeUpdateListener().subscribe((employees: Employee[]) => {
+      this.isLoading = false;
       this.employees = employees;
     });
   }
