@@ -12,9 +12,9 @@ import { EmployeeService } from '../employee.service';
 })
 
 export class EmployeeCreateComponent implements OnInit {
-  dtoEmployee: Employee = { id: "", name: "", email: "", address: "", phone: "", manager_id: 0, comments: ""};
+  dtoEmployee: Employee = { id: "", rv: 0, name: "", email: "", address: "", phone: "", user_id: 0, comments: ""};
 
-  employee:Employee = { id: "", name: "", email: "", address: "", phone: "", manager_id: 0, comments: ""};
+  employee:Employee = { id: "", rv: 0, name: "", email: "", address: "", phone: "", user_id: 0, comments: ""};
   isLoading = false;
   private opMode = "create";
   private employeeId = "";  // used to store id when in edit mode
@@ -30,11 +30,12 @@ export class EmployeeCreateComponent implements OnInit {
         this.employeeService.getEmployeeById(this.employeeId).subscribe(empData => {
           this.employee = {
             id: empData.data._id,
+            rv: empData.data.rv,
             name: empData.data.name,
             email: empData.data.email,
             address: empData.data.address,
             phone: empData.data.phone,
-            manager_id: empData.data.manager_id,
+            user_id: empData.data.user_id,
             comments: empData.data.comments
           }
           this.isLoading = false;
@@ -56,15 +57,15 @@ export class EmployeeCreateComponent implements OnInit {
     // and isLoading will be initialized to false
     this.isLoading = true;
     if (this.opMode === "create") {
-      const newEmployee = {id: "", name: form.value.name,
+      const newEmployee = {id: "", rv: 0, name: form.value.name,
       email: form.value.email, address: form.value.address,
-      phone: form.value.phone, manager_id: form.value.manager,
+      phone: form.value.phone, user_id: form.value.manager,
       comments: form.value.comments };
       this.employeeService.addEmployee(newEmployee);
     } else if (this.opMode === "edit") {
-      const newEmployee = {id: this.employeeId, name: form.value.name,
+      const newEmployee = {id: this.employeeId, rv: form.value.rv , name: form.value.name,
       email: form.value.email, address: form.value.address,
-      phone: form.value.phone, manager_id: form.value.manager,
+      phone: form.value.phone, user_id: form.value.manager,
       comments: form.value.comments };
       
       this.employeeService.updateEmployee(newEmployee);

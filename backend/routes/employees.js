@@ -10,11 +10,12 @@ const router = express.Router();
 router.post("", (req, res, next) => {
   // const employee = req.body;
   const employee = Employee({
+    rv: 0,
     name: req.body.name,
     email: req.body.email,
     address: req.body.address,
     phone: req.body.phone,
-    manager_id: req.body.manager_id,
+    user_id: req.body.user_id,
     comments: req.body.comments
   });
   employee.save().then(emp => {
@@ -29,17 +30,20 @@ router.post("", (req, res, next) => {
 
 // PUT (employee)
 router.put("/:id", (req, res, next) => {
+  const currrv = req.body.rv;
+  const newrv = currrv + 1;
   const emp = new Employee({
     _id: req.body.id,
+    rv: newrv,
     name: req.body.name,
     email: req.body.email,
     address: req.body.address,
     phone: req.body.phone,
-    manager_id: req.body.manager_id,
+    user_id: req.body.user_id,
     comments: req.body.comments
   });
 
-  Employee.updateOne({_id: emp._id }, emp).then(result => {
+  Employee.updateOne({_id: emp._id, rv: currrv }, emp).then(result => {
     console.log(result);
     res.status(200).json({
       msgId: "UPDATED",
