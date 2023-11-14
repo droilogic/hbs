@@ -13,6 +13,7 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
   private employeeSubscription: Subscription;
   employees: Employee[] = [];
   isLoading = false;
+  userLevel = 10;
 
   constructor(public employeeService: EmployeeService) {}
 

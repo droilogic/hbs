@@ -6,10 +6,11 @@
       {{ employee.name }}
     </mat-expansion-panel-header>
     <p>id: {{ employee.id }}</p>
+    <p *ngIf="userLevel == 0">rv: {{ employee.rv }}</p>
     <p>email: {{ employee.email }}</p>
     <p>address: {{ employee.address }}</p>
     <p>phone: {{ employee.phone }}</p>
-    <p>manager: {{ employee.manager_id }}</p>
+    <p>user profile: {{ employee.user_id }}</p>
     <p>comments: {{ employee.comments }}</p>
     <mat-action-row>
       <a mat-button color="primary" [routerLink]="['/emp-edit', employee.id]" >UPDATE</a>

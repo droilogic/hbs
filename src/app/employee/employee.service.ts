@@ -25,11 +25,12 @@ export class EmployeeService {
       return empData.data.map(emp => {
         return {
           id: emp._id,
+          rv: emp.rv,
           name: emp.name,
           email: emp.email,
           address: emp.address,
           phone: emp.phone,
-          manager_id: emp.manager_id,
+          user_id: emp.user_id,
           comments: emp.comments
         }
       })
