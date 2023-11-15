@@ -1,0 +1,21 @@
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+
+<mat-accordion multi="true" *ngIf="hotels.length > 0 && !isLoading">
+  <mat-expansion-panel *ngFor="let hotel of hotels">
+    <mat-expansion-panel-header>
+      {{ hotel.name }}
+    </mat-expansion-panel-header>
+    <p>id: {{ hotel.id }}</p>
+    <p *ngIf="userLevel == 0">rv: {{ hotel.rv }}</p>
+    <p>email: {{ hotel.email }}</p>
+    <p>address: {{ hotel.address }}</p>
+    <p>phone: {{ hotel.phone }}</p>
+    <p>user profile: {{ hotel.rooms }}</p>
+    <p>comments: {{ hotel.comments }}</p>
+    <mat-action-row>
+      <a mat-button color="primary" [routerLink]="['/hotel-edit', hotel.id]" >UPDATE</a>
+      <button mat-button color="warn" (click)="onDelete(hotel.id)">DELETE</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>
+<p class="info-text mat-body-1" *ngIf="hotels.length <= 0 && !isLoading">No hotels defined</p>

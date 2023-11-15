@@ -7,7 +7,7 @@ const moment = require("moment");
 
 // import routes
 const employeeRoutes = require('./routes/employees');
-const Manager = require('./models/manager');
+const hotelRoutes = require('./routes/hotels');
 
 // main app
 const app = express();
@@ -57,6 +57,7 @@ app.use((req, res, next) => {
 
 // middleware: register routes
 app.use("/api/employees", employeeRoutes);
+app.use("/api/hotels", hotelRoutes);
 
 // returns current date/time
 function now() {

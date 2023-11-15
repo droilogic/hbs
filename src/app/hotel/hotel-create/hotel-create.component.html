@@ -1,0 +1,35 @@
+<h3>Hotel</h3>
+<mat-card>
+
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+
+  <form (submit)="onSaveHotel(hotelPostForm)" #hotelPostForm="ngForm" *ngIf="!isLoading">
+    <mat-form-field>
+      <mat-label>Name:</mat-label>
+      <input matInput name="name" [ngModel]="hotel?.name" required #name="ngModel" placeholder="name">
+      <mat-error *ngIf="name.invalid">Name cannot be empty</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>E-mail:</mat-label>
+      <input matInput name="email" [ngModel]="hotel?.email" required #email="ngModel" placeholder="E-mail">
+      <mat-error *ngIf="email.invalid">E-mail cannot be empty</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Address:</mat-label>
+      <input matInput name="address" [ngModel]="hotel?.address" placeholder="Address">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Phone:</mat-label>
+      <input matInput name="phone" [ngModel]="hotel?.phone" placeholder="Phone">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Rooms:</mat-label>
+      <input matInput name="rooms" [ngModel]="hotel?.rooms" placeholder="Rooms">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Comments:</mat-label>
+      <textarea matInput name="comments" rows="3" [ngModel]="hotel?.comments" placeholder="Comments"></textarea>
+    </mat-form-field>
+    <button mat-raised-button color="accent" type="submit">Save</button>
+  </form>
+</mat-card>

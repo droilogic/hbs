@@ -5,6 +5,6 @@ export interface Employee {
 	email: string;
 	address: string;
 	phone: string;
-	user_id: number;
+	user_id: string;
 	comments: string;
 }

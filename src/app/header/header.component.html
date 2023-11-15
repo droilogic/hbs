@@ -14,7 +14,7 @@
     <button mat-menu-item [matMenuTriggerFor]="employees">Guests</button>
     <button mat-menu-item [matMenuTriggerFor]="employees">Countries</button>
     <hr>
-    <button mat-menu-item [matMenuTriggerFor]="employees">Hotels</button>
+    <button mat-menu-item [matMenuTriggerFor]="hotels">Hotels</button>
     <button mat-menu-item [matMenuTriggerFor]="employees">Rooms</button>
     <button mat-menu-item [matMenuTriggerFor]="employees">Room Classes</button>
     <hr>
@@ -43,6 +43,15 @@
     </ul>
   </mat-menu>
   
-
+  <mat-menu #hotels="matMenu">
+    <ul>
+      <li>
+        <a mat-button routerLink="/hotel-list" routerLinkActive="mat-accent">Hotels List</a>
+      </li>
+      <li>
+        <a mat-button routerLink="/hotel-create" routerLinkActive="mat-accent">New Hotel</a>
+      </li>
+    </ul>
+  </mat-menu>
+  
 </mat-toolbar>
-

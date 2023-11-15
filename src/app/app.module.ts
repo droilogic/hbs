@@ -19,6 +19,8 @@ import { HeaderComponent } from './header/header.component';
 import { OwnerListComponent } from './owner/owner-list/owner-list.component';
 import { EmployeeCreateComponent } from './employee/employee-create/employee-create.component';
 import { EmployeeListComponent } from './employee/employee-list/employee-list.component';
+import { HotelCreateComponent } from './hotel/hotel-create/hotel-create.component';
+import { HotelListComponent } from './hotel/hotel-list/hotel-list.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { EmployeeListComponent } from './employee/employee-list/employee-list.co
     HeaderComponent,
     OwnerListComponent,
     EmployeeCreateComponent,
-    EmployeeListComponent
+    EmployeeListComponent,
+    HotelCreateComponent,
+    HotelListComponent
   ],
   imports: [
     BrowserModule,
@@ -47,4 +51,4 @@ import { EmployeeListComponent } from './employee/employee-list/employee-list.co
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

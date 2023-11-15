@@ -12,9 +12,9 @@ import { EmployeeService } from '../employee.service';
 })
 
 export class EmployeeCreateComponent implements OnInit {
-  dtoEmployee: Employee = { id: "", rv: 0, name: "", email: "", address: "", phone: "", user_id: 0, comments: ""};
+  dtoEmployee: Employee = { id: "", rv: 0, name: "", email: "", address: "", phone: "", user_id: "", comments: ""};
 
-  employee:Employee = { id: "", rv: 0, name: "", email: "", address: "", phone: "", user_id: 0, comments: ""};
+  employee:Employee = { id: "", rv: 0, name: "", email: "", address: "", phone: "", user_id: "", comments: ""};
   isLoading = false;
   private opMode = "create";
   private employeeId = "";  // used to store id when in edit mode
