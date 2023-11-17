@@ -13,7 +13,7 @@ import { mimeType } from '../mime-type.validator';
   styleUrls: ['./hotel-create.component.css']
 })
 export class HotelCreateComponent implements OnInit {
-  hotel:Hotel = { id: "", rv: 0, name: "", email: "", address: "", phone: "", rooms: 0, owner_id: "", comments: ""};
+  hotel:Hotel = { id: "", rv: 0, name: "", img: "", email: "", address: "", phone: "", rooms: 0, owner_id: "", comments: ""};
   isLoading = false;
   form: FormGroup;
   imagePreview: string;
@@ -62,6 +62,7 @@ export class HotelCreateComponent implements OnInit {
             id: hotelData.data._id,
             rv: hotelData.data.rv,
             name: hotelData.data.name,
+            img: hotelData.data.img,
             email: hotelData.data.email,
             address: hotelData.data.address,
             phone: hotelData.data.phone,
@@ -71,12 +72,14 @@ export class HotelCreateComponent implements OnInit {
           };
           this.form.setValue({
             "name": this.hotel.name,
+            "image": this.hotel.img,
             "email": this.hotel.email,
             "address": this.hotel.address,
             "phone": this.hotel.phone,
             "rooms": this.hotel.rooms,
             "comments": this.hotel.comments
           });
+
           this.isLoading = false;
         });
       } else {
@@ -87,23 +90,30 @@ export class HotelCreateComponent implements OnInit {
   }
 
   onPickImage(evt: Event) {
-    const file = (evt.target as HTMLInputElement).files[0];
-    // store the file object into image control
-    this.form.patchValue({"image": file});
-    // this updates the form with the new image value
-    this.form.get("image").updateValueAndValidity();
-
-    // read the byte stream and convert it to base64 data
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.imagePreview = reader.result as string;
-    };
-    reader.readAsDataURL(file);
+    if ((evt.target as HTMLInputElement).files) {
+      const file = (evt.target as HTMLInputElement).files[0];
+      // store the file object into image control
+      this.form.patchValue({"image": file});
+      // recalculate value and validation status of the image control
+      this.form.get("image").updateValueAndValidity();
+      //console.log("hotel-create-component.onPickImage.evt.target:");
+      //console.dir((evt.target as HTMLInputElement));
+      //console.log("hotel-create-component.onPickImage.evt.target.files[0]:");
+      //console.dir((evt.target as HTMLInputElement).files[0]);
+  
+      // read the byte stream and convert it to base64 data
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
   onSaveHotel() {
 
     if(this.form.invalid) {
+      console.log("hotel-create-component.onSaveHotel: return from invalid form.");
       return;
     }
 
@@ -111,18 +121,20 @@ export class HotelCreateComponent implements OnInit {
     // and isLoading will be initialized to false
     this.isLoading = true;
     if (this.opMode === "create") {
-      const newHotel = { id: "", rv: 0, name: this.form.value.name,
+      const newHotel = { id: "", rv: 0, name: this.form.value.name, img: "",
       email: this.form.value.email, address: this.form.value.address,
       phone: this.form.value.phone, rooms: this.form.value.rooms, owner_id: "",
       comments: this.form.value.comments };
       this.hotelService.addHotel(newHotel, this.form.value.image);
     } else if (this.opMode === "edit") {
-      const newHotel = { id: this.hotelId, rv: this.hotel.rv , name: this.form.value.name,
+      const newHotel = { id: this.hotelId, rv: this.hotel.rv , name: this.form.value.name, img: "",
       email: this.form.value.email, address: this.form.value.address,
       phone: this.form.value.phone, rooms: this.form.value.rooms, owner_id: "",
       comments: this.form.value.comments };
+
+      console.log("hotel-create-component.onSaveHotel.newHotel(" + this.opMode + "): " + JSON.stringify(newHotel));
       
-      this.hotelService.updateHotel(newHotel);
+      this.hotelService.updateHotel(newHotel, this.form.value.image);
     }
     // clear the form
     this.form.reset();

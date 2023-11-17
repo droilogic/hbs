@@ -32,11 +32,14 @@ const storage = multer.diskStorage({
 
 // POST
 router.post("", multer({storage: storage}).single("image"), (req, res, next) => {
-  // const hotel = req.body;
+  // our server URL
+  const url = req.protocol + "://" + req.get("host");
+
   const hotel = Hotel({
     rv: 0,
     name: req.body.name,
     email: req.body.email,
+    img: url + "/images/" + req.file.filename,
     address: req.body.address,
     phone: req.body.phone,
     rooms: req.body.rooms,
@@ -47,7 +50,7 @@ router.post("", multer({storage: storage}).single("image"), (req, res, next) => 
     res.status(201).json({
       msgId: "ADDED",
       msgDescr: "ADDED " + hotel._id,
-      data: hotel._id
+      data: hotel
     });
   });
 
@@ -55,13 +58,28 @@ router.post("", multer({storage: storage}).single("image"), (req, res, next) => 
 
 
 // PUT
-router.put("/:id", (req, res, next) => {
+router.put("/:id", multer({storage: storage}).single("image"), (req, res, next) => {
+
+  //console.log("req.body.img: " + req.body.img + "\nreq.file.filename: " + req.file?.filename);
+
+  // check if we got a new file
+  let imagePath = req.body.img;
+  if (req.file) {
+    // our server URL
+    const url = req.protocol + "://" + req.get("host");
+    // we got a new file, update image path
+    imagePath = url + "/images/" + req.file.filename;
+    console.log("backend.hotels.router.put: new file detected (" + req.file.filename + "), new URL: " + imagePath);
+  }
+
   const currrv = req.body.rv;
   const newrv = currrv + 1;
+  console.log("newrv: ", newrv);
   const hotel = new Hotel({
     _id: req.body.id,
     rv: newrv,
     name: req.body.name,
+    img: imagePath,
     email: req.body.email,
     address: req.body.address,
     phone: req.body.phone,
@@ -70,7 +88,12 @@ router.put("/:id", (req, res, next) => {
     comments: req.body.comments
   });
 
-  Hotel.updateOne({_id: hotel._id, rv: currrv }, hotel).then(result => {
+  console.log("Hotel.Router.put.hotel: " + hotel);
+  filter = {}
+  filter["_id"] = {"$eq": req.body.id};
+  filter["rv"] = {"$eq": currrv};
+
+  Hotel.updateOne(filter, hotel).then(result => {
     console.log(result);
     res.status(200).json({
       msgId: "UPDATED",
@@ -84,13 +107,13 @@ router.put("/:id", (req, res, next) => {
 // DELETE
 router.delete("/:id", (req, res, next) => {
   const id = req.params.id;
-  Employee.deleteOne({ _id: id })
+  Hotel.deleteOne({ _id: id })
     .then(result => {
       console.log(result);
-      console.log("employee deleted");
+      console.log("hotel deleted");
       res.status(200).json({
         msgId: "DELETED",
-        msgDescr: 'DELETED',
+        msgDescr: "DELETED " + id,
         data: id
       });
     });

@@ -12,6 +12,7 @@ const hotelSchema = mongoose.Schema({
 	// don't include id, we will go along with mongoDB's _id
 	rv: { type: Number, required: true },	// row version (used for tracking update conflicts)
 	name: { type: String, required: true},
+	img: { type: String, required: true },
 	email: { type: String, required: true},
 	address: { type: String, default: ''},
 	phone: { type: String, default: ''},

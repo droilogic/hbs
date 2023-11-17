@@ -1,11 +1,17 @@
 import { AbstractControl } from "@angular/forms";
-import { Observable, Observer } from "rxjs";
+import { Observable, Observer, of } from "rxjs";
 
 export const mimeType = (ctrl: AbstractControl): Promise<{[key: string]: any}> | Observable<{[key: string]: any}> => {
+  // check if ctrl contains a string (in case of update and no change on image)
+  if (typeof(ctrl.value) === "string") {
+    // immediately return an observable
+    return of(null);
+  }
   const file = ctrl.value as File;
   const fileReader = new FileReader();
-  const frObs = Observable.create((obs: Observer<{[key: string]: any}>) => {
-    fileReader.addEventListener("loadend", () => {
+  //const frObs = Observable.create((obs: Observer<{[key: string]: any}>) => {
+  const frObs = new Observable((obs: Observer<{[key: string]: any}>) => {
+      fileReader.addEventListener("loadend", () => {
       const arr = new Uint8Array(fileReader.result as ArrayBuffer).subarray(0, 4);
       let header = "";
       let isValid = false;
@@ -14,6 +20,7 @@ export const mimeType = (ctrl: AbstractControl): Promise<{[key: string]: any}> |
       }
       switch (header) {
         case "89504e47":
+          // png
           isValid = true;
           break;
         case "ffd8ffe0":
@@ -21,6 +28,8 @@ export const mimeType = (ctrl: AbstractControl): Promise<{[key: string]: any}> |
         case "ffd8ffe2":
         case "ffd8ffe3":
         case "ffd8ffe8":
+        case "ffd8ffdb":
+          // jpg family
           isValid = true;
           break;
         default:

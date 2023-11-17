@@ -10,3 +10,12 @@ mat-spinner {
 .info-text {
   text-align: center;
 }
+
+.hotel-img {
+  width: 100%;
+}
+
+.hotel-img img {
+  width: 100%;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+}

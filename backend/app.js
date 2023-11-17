@@ -1,4 +1,5 @@
 require("dotenv").config();
+const path = require("path");
 const express = require("express");
 const helmet = require("helmet");
 const bodyParser = require("body-parser");
@@ -15,18 +16,18 @@ const app = express();
 // middleware: server protection
 app.use(helmet.contentSecurityPolicy());
 app.use(helmet.dnsPrefetchControl());
-app.use(helmet.crossOriginEmbedderPolicy())
-app.use(helmet.frameguard())
-app.use(helmet.hidePoweredBy())
-app.use(helmet.hsts())
-app.use(helmet.ieNoOpen())
-app.use(helmet.noSniff())
-app.use(helmet.permittedCrossDomainPolicies())
-app.use(helmet.referrerPolicy())
-app.use(helmet.xssFilter())
-app.use(helmet.originAgentCluster())
-app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }))
-app.use(helmet.crossOriginOpenerPolicy())
+app.use(helmet.crossOriginEmbedderPolicy());
+app.use(helmet.frameguard());
+app.use(helmet.hidePoweredBy());
+app.use(helmet.hsts());
+app.use(helmet.ieNoOpen());
+app.use(helmet.noSniff());
+app.use(helmet.permittedCrossDomainPolicies());
+app.use(helmet.referrerPolicy());
+app.use(helmet.xssFilter());
+app.use(helmet.originAgentCluster());
+app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }));
+app.use(helmet.crossOriginOpenerPolicy());
 
 // get environment variables
 const db_url = process.env.DB_URL;
@@ -42,6 +43,9 @@ mongoose.connect(db_url)
 // middleware: body parser, URL encoding
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: false }));
+
+// middleware: allow access to static content
+app.use("/images", express.static(path.join("backend/images")));
 
 // middleware: CORS
 app.use((req, res, next) => {
