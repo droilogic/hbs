@@ -41,5 +41,8 @@ testem.log
 .DS_Store
 Thumbs.db
 
+# Backend storage
+/backend/images
+
 # Environment
 .env

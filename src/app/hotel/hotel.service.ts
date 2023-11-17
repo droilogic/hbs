@@ -54,16 +54,27 @@ export class HotelService {
     return this.hotelsUpdated.asObservable();
   }
 
-  addHotel(hotel: Hotel) {
+  addHotel(hotel: Hotel, img: File) {
+    const hotelData = new FormData();
+    hotelData.append("name", hotel.name);
+    hotelData.append("email", hotel.email);
+    hotelData.append("address", hotel.address);
+    hotelData.append("phone", hotel.phone);
+    hotelData.append("rooms", "" + hotel.rooms);
+    hotelData.append("comments", hotel.comments);
+    hotelData.append("image", img, hotel.name);
+
+    console.log(hotelData);
+
     this.http.post<{
       msgId: string,
       msgDescr: string,
       data: string
-    }>("http://localhost:3333/api/hotels", hotel).subscribe((hotelData) => {
-      console.log(hotelData.msgDescr);
+    }>("http://localhost:3333/api/hotels", hotelData).subscribe((responseData) => {
+      console.log(responseData.msgDescr);
 
       // push to local storage on success only
-      hotel.id = hotelData.data;
+      hotel.id = responseData.data;
       this.hotels.push(hotel);
       this.hotelsUpdated.next([...this.hotels]);
       // using angular router to navigate to another page

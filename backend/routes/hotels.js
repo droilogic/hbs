@@ -1,4 +1,5 @@
 const express = require('express');
+const multer = require('multer');
 
 // import schemas, models
 const Hotel = require('../models/hotel');
@@ -6,11 +7,31 @@ const Hotel = require('../models/hotel');
 
 const router = express.Router();
 
+const MIME_TYPE_MAP = {
+  "image/png": "png",
+  "image/jpeg": "jpg",
+  "image/jpg": "jpg",
+  "image/bmp": "bmp"
+}
 
+const storage = multer.diskStorage({
+  "destination": (req, file, cb) => {
+    const isValid = MIME_TYPE_MAP[file.mimetype];
+    let err = new Error("Invalid MIME type");
+    if (isValid) {
+      err = null;
+    }
+    cb(err, "backend/images");
+  },
+  "filename": (rew, file, cb) => {
+    const fname = file.originalname.toLowerCase().split(" ").join("-") + "_" + Date.now() + "." + MIME_TYPE_MAP[file.mimetype];
+    cb(null, fname);
+  }
+});
 
 
 // POST
-router.post("", (req, res, next) => {
+router.post("", multer({storage: storage}).single("image"), (req, res, next) => {
   // const hotel = req.body;
   const hotel = Hotel({
     rv: 0,
