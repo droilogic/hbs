@@ -10,36 +10,41 @@ import { Hotel } from 'src/app/interfaces/hotel';
 @Injectable({ providedIn: 'root'})
 export class HotelService {
   private hotels: Hotel[] = [];
-  private hotelsUpdated = new Subject<Hotel[]>();
+  private hotelsUpdated = new Subject<{ hotels: Hotel[], rc: number }>();
 
   constructor (private http: HttpClient, private router: Router) {}
 
-  getHotels() {
+  getHotels(itemsPerPage: number, currPage: number) {
+    const qParams = `?ps=${itemsPerPage}&pg=${currPage}`;
     // no need to unsubscribe; handled by angular itself
     this.http.get<{
       msgId: string,
       msgDescr: string,
+      cnt: number,
       data: any
-    }>("http://localhost:3333/api/hotels")
+    }>("http://localhost:3333/api/hotels" + qParams)
     .pipe(map((hotelData) => {
-      return hotelData.data.map(hotel => {
-        return {
-          id: hotel._id,
-          rv: hotel.rv,
-          name: hotel.name,
-          img: hotel.img,
-          email: hotel.email,
-          address: hotel.address,
-          phone: hotel.phone,
-          rooms: hotel.rooms,
-          owner_id: hotel.user_id,
-          comments: hotel.comments
-        }
-      })
+      return {
+        hotels: hotelData.data.map(hotel => {
+          return {
+            id: hotel._id,
+            rv: hotel.rv,
+            name: hotel.name,
+            img: hotel.img,
+            email: hotel.email,
+            address: hotel.address,
+            phone: hotel.phone,
+            rooms: hotel.rooms,
+            owner_id: hotel.user_id,
+            comments: hotel.comments
+          }
+        }),
+        rc: hotelData.cnt
+      }
     }))
     .subscribe(hotelTransformedData => {
-      this.hotels = hotelTransformedData;
-      this.hotelsUpdated.next([...this.hotels]);
+      this.hotels = hotelTransformedData.hotels;
+      this.hotelsUpdated.next({ hotels: [...this.hotels], rc: hotelTransformedData.rc });
     });
   }
 
@@ -72,13 +77,6 @@ export class HotelService {
       msgDescr: string,
       data: Hotel
     }>("http://localhost:3333/api/hotels", hotelData).subscribe((responseData) => {
-      console.log(responseData.msgDescr);
-
-      // push to local storage on success only
-      hotel.id = responseData.data.id;
-      hotel.img = responseData.data.img;
-      this.hotels.push(hotel);
-      this.hotelsUpdated.next([...this.hotels]);
       // using angular router to navigate to another page
       this.router.navigate(["/hotel-list"]);
     });
@@ -123,25 +121,13 @@ export class HotelService {
       msgDescr: string,
       data: string
     }>("http://localhost:3333/api/hotels/" + hotel.id, hotelData).subscribe(hotelData => {
-
-      // update local storage on success only
-      const updatedHotels = [...this.hotels];
-      const oldHotelIdx = updatedHotels.findIndex(h => h.id === hotel.id);
-      updatedHotels[oldHotelIdx] = hotel;
-      this.hotels = updatedHotels;
-      this.hotelsUpdated.next([...this.hotels]);
+      // using angular router to navigate to another page
       this.router.navigate(["/hotel-list"]);
     });
   }
 
   deleteHotel(id: string) {
-    this.http.delete("http://localhost:3333/api/hotels/" + id)
-    .subscribe(() => {
-      const updHotels = this.hotels.filter(hotel => hotel.id !== id);
-      this.hotels = updHotels;
-      this.hotelsUpdated.next([...this.hotels]);
-      console.log("DELETED " + id);
-    })
+    return this.http.delete("http://localhost:3333/api/hotels/" + id);
   }
 
 }

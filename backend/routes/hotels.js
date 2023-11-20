@@ -60,8 +60,6 @@ router.post("", multer({storage: storage}).single("image"), (req, res, next) => 
 // PUT
 router.put("/:id", multer({storage: storage}).single("image"), (req, res, next) => {
 
-  //console.log("req.body.img: " + req.body.img + "\nreq.file.filename: " + req.file?.filename);
-
   // check if we got a new file
   let imagePath = req.body.img;
   if (req.file) {
@@ -72,7 +70,7 @@ router.put("/:id", multer({storage: storage}).single("image"), (req, res, next) 
     console.log("backend.hotels.router.put: new file detected (" + req.file.filename + "), new URL: " + imagePath);
   }
 
-  const currrv = req.body.rv;
+  const currrv = parseInt(req.body.rv);
   const newrv = currrv + 1;
   console.log("newrv: ", newrv);
   const hotel = new Hotel({
@@ -121,12 +119,30 @@ router.delete("/:id", (req, res, next) => {
 
 // GET
 router.get("", (req, res, next) => {
-  Hotel.find().then(docs => {
+  // handling pagination
+  // hint: plus sign converts strings to numbers(!)
+  let resultset;
+  const pgSize = +req.query.ps;
+  const currPage = +req.query.pg;
+  const query = Hotel.find();
+  if (pgSize && currPage) {
+    // make sure both variables have valid values
+    query.skip(pgSize * (currPage - 1)).limit(pgSize);
+  }
+
+  query
+  .then(docs => {
+    // store returned rows
+    resultset = docs;
+    return Hotel.countDocuments();
+  })
+  .then(cnt => {
     // INFO: send response goes here since this is an async call
     res.status(200).json({
       msgId: 'OK',
       msgDescr: 'OK',
-      data: docs
+      cnt: cnt,
+      data: resultset
     });
   });
 
