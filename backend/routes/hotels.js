@@ -3,6 +3,8 @@ const multer = require('multer');
 
 // import schemas, models
 const Hotel = require('../models/hotel');
+// authentication middleware
+const authCheck = require("../middleware/auth-check");
 
 
 const router = express.Router();
@@ -31,7 +33,7 @@ const storage = multer.diskStorage({
 
 
 // POST
-router.post("", multer({storage: storage}).single("image"), (req, res, next) => {
+router.post("", authCheck, multer({storage: storage}).single("image"), (req, res, next) => {
   // our server URL
   const url = req.protocol + "://" + req.get("host");
 
@@ -58,7 +60,7 @@ router.post("", multer({storage: storage}).single("image"), (req, res, next) => 
 
 
 // PUT
-router.put("/:id", multer({storage: storage}).single("image"), (req, res, next) => {
+router.put("/:id", authCheck, multer({storage: storage}).single("image"), (req, res, next) => {
 
   // check if we got a new file
   let imagePath = req.body.img;
@@ -103,7 +105,7 @@ router.put("/:id", multer({storage: storage}).single("image"), (req, res, next) 
 
 
 // DELETE
-router.delete("/:id", (req, res, next) => {
+router.delete("/:id", authCheck, (req, res, next) => {
   const id = req.params.id;
   Hotel.deleteOne({ _id: id })
     .then(result => {

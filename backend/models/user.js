@@ -1,4 +1,5 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const uniqueValidator = require("mongoose-unique-validator");
 
 const opts = {
   timestamps: {
@@ -7,16 +8,18 @@ const opts = {
   }
 };
 
-const managerSchema = mongoose.Schema({
+const userSchema = mongoose.Schema({
 	// don't include id, we will go along with mongoDB's _id
 	rv: { type: Number, required: true},	// row version (used for tracking update conflicts)
-	username: { type: String, required: true},
+	email: { type: String, required: true, unique: true },
 	password: { type: String, required: true},
   role_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Role', required: true},
 	name: { type: String, required: true},
-	email: { type: String, required: true},
 	phone: { type: String, default: ''},
 	comments: { type: String, default: ''}
 }, opts);
 
-module.exports = mongoose.model('User', managerSchema);
+// enable unique validator
+userSchema.plugin(uniqueValidator);
+
+module.exports = mongoose.model('User', userSchema);

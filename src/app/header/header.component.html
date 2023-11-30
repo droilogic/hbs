@@ -7,26 +7,47 @@
     </li>
   </ul> -->
 
-  <button mat-icon-button [matMenuTriggerFor]="staff"><mat-icon>more_vert</mat-icon><span>HBS</span></button>
+  <button mat-icon-button [matMenuTriggerFor]="staff">
+    <mat-icon>more_vert</mat-icon>
+    <span>HBS</span>
+    <mat-label *ngIf="userAuthenticated">
+      <span> ({{ userName }})</span>
+    </mat-label>
+  </button>
+  
   <mat-menu #staff="matMenu">
-    <button mat-menu-item [matMenuTriggerFor]="managers">Managers</button>
-    <button mat-menu-item [matMenuTriggerFor]="employees">Employees</button>
-    <button mat-menu-item [matMenuTriggerFor]="employees">Guests</button>
-    <button mat-menu-item [matMenuTriggerFor]="employees">Countries</button>
+    <button mat-menu-item [matMenuTriggerFor]="auth">Authentication</button>
+    <button *ngIf="false" mat-menu-item [matMenuTriggerFor]="managers">Managers</button>
+    <button *ngIf="userAuthenticated && userAccLvl < 10" mat-menu-item [matMenuTriggerFor]="employees">Employees</button>
+    <button *ngIf="userAuthenticated" mat-menu-item [matMenuTriggerFor]="employees">Guests</button>
     <hr>
     <button mat-menu-item [matMenuTriggerFor]="hotels">Hotels</button>
-    <button mat-menu-item [matMenuTriggerFor]="employees">Rooms</button>
-    <button mat-menu-item [matMenuTriggerFor]="employees">Room Classes</button>
-    <hr>
-    <button mat-menu-item [matMenuTriggerFor]="employees">Bookings</button>
+    <button *ngIf="false" mat-menu-item [matMenuTriggerFor]="employees">Rooms</button>
+    <button *ngIf="false" mat-menu-item [matMenuTriggerFor]="employees">Room Classes</button>
+    <hr *ngIf="false">
+    <button *ngIf="false" mat-menu-item [matMenuTriggerFor]="employees">Bookings</button>
+  </mat-menu>
+
+  <mat-menu #auth="matMenu">
+    <ul>
+      <li *ngIf="!userAuthenticated">
+        <a mat-button routerLink="/signin" routerLinkActive="mat-accent">Sign In</a>
+      </li>
+      <li *ngIf="!userAuthenticated">
+        <a mat-button routerLink="/signup" routerLinkActive="mat-accent">Sign Up</a>
+      </li>
+      <li *ngIf="userAuthenticated">
+        <a mat-button (click)="onSignOut()" routerLinkActive="mat-accent">Sign Out</a>
+      </li>
+    </ul>
   </mat-menu>
 
   <mat-menu #managers="matMenu">
     <ul>
-      <li>
+      <li *ngIf="userAuthenticated">
         <a mat-button routerLink="/mgr-list" routerLinkActive="mat-accent">Managers List</a>
       </li>
-      <li>
+      <li *ngIf="userAuthenticated">
         <a mat-button routerLink="/mgr-create" routerLinkActive="mat-accent">New Manager</a>
       </li>
     </ul>
@@ -34,22 +55,22 @@
   
   <mat-menu #employees="matMenu">
     <ul>
-      <li>
+      <li *ngIf="userAuthenticated">
         <a mat-button routerLink="/emp-list" routerLinkActive="mat-accent">Employees List</a>
       </li>
-      <li>
+      <li *ngIf="userAuthenticated">
         <a mat-button routerLink="/emp-create" routerLinkActive="mat-accent">New Employee</a>
       </li>
     </ul>
   </mat-menu>
-  
+
   <mat-menu #hotels="matMenu">
     <ul>
       <li>
         <a mat-button routerLink="/hotel-list" routerLinkActive="mat-accent">Hotels List</a>
       </li>
-      <li>
-        <a mat-button routerLink="/hotel-create" routerLinkActive="mat-accent">New Hotel</a>
+      <li *ngIf="userAuthenticated">
+        <a *ngIf="userAccLvl < 10" mat-button routerLink="/hotel-create" routerLinkActive="mat-accent">New Hotel</a>
       </li>
     </ul>
   </mat-menu>

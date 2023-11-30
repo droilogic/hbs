@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 
 import { Hotel } from 'src/app/interfaces/hotel';
 import { HotelService } from '../hotel.service';
 import { mimeType } from '../mime-type.validator';
+import { AuthService } from 'src/app/auth/auth.service';
 
 
 @Component({
@@ -20,9 +21,15 @@ export class HotelCreateComponent implements OnInit {
   private opMode = "create";
   private hotelId = "";  // used to store id when in edit mode
 
-  constructor(public hotelService: HotelService, public route: ActivatedRoute) {}
+  constructor(public hotelService: HotelService, public route: ActivatedRoute, private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
+
+    // check if the current logged in use has the required access level for this page
+    if (this.authService.getAuthUserAccLvl() >= 10) {
+      this.router.navigate(["/hotel-list"]);
+    }
+
     this.form = new FormGroup({
       "name": new FormControl(null, { validators: [
         Validators.required,

@@ -1,0 +1,45 @@
+<h3>HBS / Sign Up</h3>
+<mat-card>
+
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+
+  <form #signupForm="ngForm" (submit)="onSignUp(signupForm)" *ngIf="!isLoading">
+    <mat-form-field>
+      <mat-label>E-mail:</mat-label>
+      <input #emailField="ngModel" matInput type="email" name="email" ngModel placeholder="E-mail" required email>
+      <mat-error *ngIf="emailField.invalid">Please type in a valid e-mail</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Password:</mat-label>
+      <input #passwordField="ngModel" matInput type="password" name="password" ngModel placeholder="Password" required>
+      <mat-error *ngIf="passwordField.invalid">Please type in a password</mat-error>
+    </mat-form-field>
+    <mat-form-field *ngIf="userLevel < 9999">
+      <mat-label>Role</mat-label>
+      <!-- disable role drop-down if user IS NOT admin -->
+      <!-- set default role to userDefaultRole === Guest -->
+      <mat-select [disabled]="userLevel >= 10" #roleField="ngModel" matNativeControl name="role_id" ngModel required [(ngModel)]="userDefaultRole">
+        <mat-option value="655c9c445f499d684d2079ba">Guest</mat-option>
+        <mat-option value="655c9bfc5f499d684d2079b9">Plain user</mat-option>
+        <mat-option value="655c9b3e5f499d684d2079b8">Administrator</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Fullname:</mat-label>
+      <input #nameField="ngModel" matInput type="text" name="name" ngModel placeholder="Fullname">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Phone:</mat-label>
+      <input #phoneField="ngModel" matInput type="text" name="phone" ngModel placeholder="Phone">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Comments:</mat-label>
+      <textarea #commentField="ngModel" matInput name="comments" rows="3" ngModel placeholder="Comments"></textarea>
+    </mat-form-field>
+
+    <button mat-raised-button color="accent" type="submit" *ngIf="!isLoading">Sign Up</button>
+  </form>
+
+  <p class="info-text mat-body-2" *ngIf="userCreated && !isLoading">User created!</p>
+
+</mat-card>

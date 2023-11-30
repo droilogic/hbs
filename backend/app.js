@@ -9,6 +9,7 @@ const moment = require("moment");
 // import routes
 const employeeRoutes = require('./routes/employees');
 const hotelRoutes = require('./routes/hotels');
+const userRoutes = require("./routes/auth");
 
 // main app
 const app = express();
@@ -53,7 +54,7 @@ app.use((req, res, next) => {
   // CAUTION: careful of what is ALLOWED; server security can be compromised!
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
   // block requests not containing the following headers
-  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Authorization, Accept");
   // verbs allowed
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
   next();
@@ -62,6 +63,7 @@ app.use((req, res, next) => {
 // middleware: register routes
 app.use("/api/employees", employeeRoutes);
 app.use("/api/hotels", hotelRoutes);
+app.use("/api/auth", userRoutes);
 
 // returns current date/time
 function now() {

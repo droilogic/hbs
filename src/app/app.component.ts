@@ -1,20 +1,21 @@
-import { Component } from '@angular/core';
-import { Owner } from './interfaces/owner';
-import { Manager } from './interfaces/manager';
-import { Employee } from './interfaces/employee';
-import { Client } from './interfaces/client';
-import { Country } from './interfaces/country';
-import { Hotel } from './interfaces/hotel';
-import { Room } from './interfaces/room';
-import { RoomClass } from './interfaces/room_class';
-import { Floor } from './interfaces/floor';
-import { Booking } from './interfaces/booking';
+import { Component, OnInit } from '@angular/core';
+
+import { AuthService } from './auth/auth.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+
+  constructor(private authService: AuthService) {}
+
+  ngOnInit(): void {
+    // attempt to auto sign in user
+    // in case we find authentication data
+    // stored in browser's local storage
+    this.authService.signinUserAuto();
+  }
   
 }

@@ -15,7 +15,7 @@
     <p>phone: {{ hotel?.phone }}</p>
     <p>user profile: {{ hotel.rooms }}</p>
     <p>comments: {{ hotel?.comments }}</p>
-    <mat-action-row>
+    <mat-action-row *ngIf="userAuthenticated && userLevel < 10">
       <a mat-button color="primary" [routerLink]="['/hotel-edit', hotel.id]" >UPDATE</a>
       <button mat-button color="warn" (click)="onDelete(hotel.id)">DELETE</button>
     </mat-action-row>
