@@ -14,7 +14,7 @@ import { AuthService } from 'src/app/auth/auth.service';
   styleUrls: ['./hotel-create.component.css']
 })
 export class HotelCreateComponent implements OnInit {
-  hotel:Hotel = { id: "", rv: 0, name: "", img: "", email: "", address: "", phone: "", rooms: 0, owner_id: "", comments: ""};
+  hotel:Hotel = { id: "", rv: 0, name: "", img: "", email: "", address: "", phone: "", rooms: 0, owner_id: "", comments: "" };
   isLoading = false;
   form: FormGroup;
   imagePreview: string;

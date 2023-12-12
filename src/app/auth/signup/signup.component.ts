@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 import { AuthService } from '../auth.service';
 import { User } from 'src/app/interfaces/user';
@@ -9,8 +10,9 @@ import { User } from 'src/app/interfaces/user';
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })
-export class SignupComponent implements OnInit {
+export class SignupComponent implements OnInit, OnDestroy {
   isLoading = false;
+  private authStatusSubscription: Subscription;
   userLevel = 999;  // default user access level is guest (can only browse hotels and(?) rooms)
   userDefaultRole = "655c9c445f499d684d2079ba";   // default role is Guest
   userCreated = false;
@@ -19,6 +21,13 @@ export class SignupComponent implements OnInit {
 
   ngOnInit(): void {
     this.userLevel = this.authService.getAuthUserAccLvl();
+    this.authStatusSubscription = this.authService.getAuthStatusListener().subscribe(authStatus => {
+      this.isLoading = false;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.authStatusSubscription.unsubscribe();
   }
 
 
@@ -40,10 +49,10 @@ export class SignupComponent implements OnInit {
       comments: form.value.comments
     } as User;
 
-    console.log("SignupComponent.onSignUp.user: " + JSON.stringify(user));
+    // console.log("SignupComponent.onSignUp.user: " + JSON.stringify(user));
     // data OK
 
-    this.userCreated = true;
     this.authService.addUser(user);
+    this.userCreated = true;
   }
 }

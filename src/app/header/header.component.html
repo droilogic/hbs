@@ -17,15 +17,15 @@
   
   <mat-menu #staff="matMenu">
     <button mat-menu-item [matMenuTriggerFor]="auth">Authentication</button>
+    <button *ngIf="userAuthenticated && userAccLvl < 10" mat-menu-item [matMenuTriggerFor]="users">Users</button>
     <button *ngIf="false" mat-menu-item [matMenuTriggerFor]="managers">Managers</button>
-    <button *ngIf="userAuthenticated && userAccLvl < 10" mat-menu-item [matMenuTriggerFor]="employees">Employees</button>
-    <button *ngIf="userAuthenticated" mat-menu-item [matMenuTriggerFor]="employees">Guests</button>
+    <button *ngIf="false" mat-menu-item [matMenuTriggerFor]="guests">Guests</button>
     <hr>
     <button mat-menu-item [matMenuTriggerFor]="hotels">Hotels</button>
     <button *ngIf="false" mat-menu-item [matMenuTriggerFor]="employees">Rooms</button>
     <button *ngIf="false" mat-menu-item [matMenuTriggerFor]="employees">Room Classes</button>
-    <hr *ngIf="false">
-    <button *ngIf="false" mat-menu-item [matMenuTriggerFor]="employees">Bookings</button>
+    <hr *ngIf="userAuthenticated && userAccLvl < 999">
+    <button *ngIf="userAuthenticated && userAccLvl < 999" mat-menu-item [matMenuTriggerFor]="bookings">Bookings</button>
   </mat-menu>
 
   <mat-menu #auth="matMenu">
@@ -38,6 +38,17 @@
       </li>
       <li *ngIf="userAuthenticated">
         <a mat-button (click)="onSignOut()" routerLinkActive="mat-accent">Sign Out</a>
+      </li>
+    </ul>
+  </mat-menu>
+
+  <mat-menu #users="matMenu">
+    <ul>
+      <li *ngIf="userAuthenticated && userAccLvl < 10">
+        <a mat-button routerLink="/user-list" routerLinkActive="mat-accent">Users List</a>
+      </li>
+      <li *ngIf="userAuthenticated && userAccLvl < 10">
+        <a mat-button routerLink="/signup" routerLinkActive="mat-accent">New User</a>
       </li>
     </ul>
   </mat-menu>
@@ -64,6 +75,17 @@
     </ul>
   </mat-menu>
 
+  <mat-menu #guests="matMenu">
+    <ul>
+      <li *ngIf="userAuthenticated && userAccLvl < 100">
+        <a mat-button routerLink="/emp-list" routerLinkActive="mat-accent">Employees List</a>
+      </li>
+      <li *ngIf="userAuthenticated && userAccLvl < 100">
+        <a mat-button routerLink="/emp-create" routerLinkActive="mat-accent">New Employee</a>
+      </li>
+    </ul>
+  </mat-menu>
+
   <mat-menu #hotels="matMenu">
     <ul>
       <li>
@@ -71,6 +93,17 @@
       </li>
       <li *ngIf="userAuthenticated">
         <a *ngIf="userAccLvl < 10" mat-button routerLink="/hotel-create" routerLinkActive="mat-accent">New Hotel</a>
+      </li>
+    </ul>
+  </mat-menu>
+  
+  <mat-menu #bookings="matMenu">
+    <ul>
+      <li *ngIf="userAuthenticated">
+        <a *ngIf="userAccLvl < 999" mat-button routerLink="/booking-list" routerLinkActive="mat-accent">Bookings</a>
+      </li>
+      <li *ngIf="userAuthenticated">
+        <a *ngIf="userAccLvl < 999" mat-button routerLink="/booking-create" routerLinkActive="mat-accent">New Booking</a>
       </li>
     </ul>
   </mat-menu>

@@ -13,6 +13,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -26,6 +27,11 @@ import { HotelListComponent } from './hotel/hotel-list/hotel-list.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { SigninComponent } from './auth/signin/signin.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
+import { BookingCreateComponent } from './booking/booking-create/booking-create.component';
+import { UserListComponent } from './auth/user-list/user-list.component';
+import { UserCreateComponent } from './auth/user-create/user-create.component';
+import { ErrorInterceptor } from './error.interceptor';
+import { ErrorComponent } from './error/error.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +44,11 @@ import { AuthInterceptor } from './auth/auth.interceptor';
     HotelCreateComponent,
     HotelListComponent,
     SignupComponent,
-    SigninComponent
+    SigninComponent,
+    BookingCreateComponent,
+    UserListComponent,
+    UserCreateComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,
@@ -56,9 +66,13 @@ import { AuthInterceptor } from './auth/auth.interceptor';
     MatMenuModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatDialogModule
   ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

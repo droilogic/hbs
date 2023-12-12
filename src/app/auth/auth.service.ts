@@ -10,6 +10,7 @@ import { User } from 'src/app/interfaces/user';
 
 @Injectable({ providedIn: 'root'})
 export class AuthService {
+  private backendAuthVector = "http://localhost:3333/api/auth";
   private userAuthenticated = false;
   private userId: string;
   private userName: string;
@@ -67,7 +68,7 @@ export class AuthService {
       msgDescr: string,
       cnt: number,
       data: any
-    }>("http://localhost:3333/api/auth" + qParams)
+    }>(this.backendAuthVector + qParams)
     .pipe(map((userData) => {
       return {
         users: userData.data.map(user => {
@@ -96,7 +97,7 @@ export class AuthService {
       msgId: string,
       msgDescr: string,
       data: any
-    }>("http://localhost:3333/api/auth/" + userid);
+    }>(this.backendAuthVector + "/" + userid);
   }
 
   getUserUpdateListener() {
@@ -119,15 +120,17 @@ export class AuthService {
       "comments": user.comments
     }
 
-    this.http.post<{
+    return this.http.post<{
       msgId: string,
       msgDescr: string,
       data: User
-    }>("http://localhost:3333/api/auth/signup", userData).subscribe((responseData) => {
+    }>(this.backendAuthVector + "/signup", userData).subscribe((responseData) => {
       // using angular router to navigate to another page
       console.log(responseData);
       
       this.router.navigate(["/signup"]);
+    }, err => {
+      this.authStatusListener.next(false);
     });
   }
 
@@ -152,7 +155,7 @@ export class AuthService {
       msgId: string,
       msgDescr: string,
       data: string
-    }>("http://localhost:3333/api/auth/" + user.id, userData).subscribe(userData => {
+    }>(this.backendAuthVector + "/" + user.id, userData).subscribe(userData => {
       // using angular router to navigate to another page
       this.router.navigate(["/user-list"]);
     });
@@ -163,7 +166,7 @@ export class AuthService {
     if (id === "655dcb44623570df8d7c566d") {
       return;
     }
-    return this.http.delete("http://localhost:3333/api/auth/" + id);
+    return this.http.delete(this.backendAuthVector + "/" + id);
   }
 
 
@@ -181,9 +184,9 @@ export class AuthService {
       roleId: string,
       acclvl: number,
       expiresIn: number
-    }>("http://localhost:3333/api/auth/signin", authData)
+    }>(this.backendAuthVector + "/signin", authData)
       .subscribe(response => {
-        // console.log(response);
+        console.log(response);
         // data OK
         const token = response.data;
         this.authToken = token;
@@ -207,6 +210,8 @@ export class AuthService {
           // this must be changed to bookings
           this.router.navigate(["/hotel-list"]);
         }
+      }, err => {
+        this.authStatusListener.next(false);
       });
   }
 
@@ -257,6 +262,7 @@ export class AuthService {
 
   // methods for browser local storage handling
   private storeAuthData(token: string, userId: string, userName: string, roleId: string, userAccLvl: Number, expDts: Date) {
+    // save to local storage
     localStorage.setItem("hbsAuthToken", token);
     localStorage.setItem("hbsAuthUserId", userId);
     localStorage.setItem("hbsAuthUserName", userName);
@@ -266,6 +272,7 @@ export class AuthService {
   }
 
   private clearAuthData() {
+    // clear from local storage
     localStorage.removeItem("hbsAuthToken");
     localStorage.removeItem("hbsAuthUserId");
     localStorage.removeItem("hbsAuthUserName");
@@ -275,6 +282,7 @@ export class AuthService {
   }
 
   private restoreAuthData() {
+    // fetch from local storage
     const authTokenFetched = localStorage.getItem("hbsAuthToken");
     const userIdFetched = localStorage.getItem("hbsAuthUserId");
     const userNameFetched = localStorage.getItem("hbsAuthUserName");
@@ -282,12 +290,13 @@ export class AuthService {
     const userAccessLevelFetched = parseInt(localStorage.getItem("hbsAuthUserAccLvl"));
     const expirationDtsFetched = localStorage.getItem("hbsAuthExpDts");
 
-    console.log("AuthService.restoreAuthData.authTokenFetched: " + authTokenFetched);
-    console.log("AuthService.restoreAuthData.userIdFetched: " + userIdFetched);
-    console.log("AuthService.restoreAuthData.userNameFetched: " + userNameFetched);
-    console.log("AuthService.restoreAuthData.roleIdFetched: " + roleIdFetched);
-    console.log("AuthService.restoreAuthData.userAccessLevelFetched: " + userAccessLevelFetched);
-    console.log("AuthService.restoreAuthData.expirationDtsFetched: " + expirationDtsFetched);
+    // console.log("AuthService.restoreAuthData.authTokenFetched: " + authTokenFetched);
+    // console.log("AuthService.restoreAuthData.userIdFetched: " + userIdFetched);
+    // console.log("AuthService.restoreAuthData.userNameFetched: " + userNameFetched);
+    // console.log("AuthService.restoreAuthData.roleIdFetched: " + roleIdFetched);
+    // console.log("AuthService.restoreAuthData.userAccessLevelFetched: " + userAccessLevelFetched);
+    // console.log("AuthService.restoreAuthData.expirationDtsFetched: " + expirationDtsFetched);
+    // data OK
 
     // check if we have ALL data
     if (!authTokenFetched || !userIdFetched || !userNameFetched || !roleIdFetched || Number.isNaN(userAccessLevelFetched) || !expirationDtsFetched) {

@@ -12,14 +12,21 @@ const OWN_SALT = process.env.OWN_SALT;
 module.exports = (req, res, next) => {
   try {
     // get the 2nd string of authorization payload
-    const token = req.headers.authorization.split(" ")[1];
-    jwt.verify(token, OWN_SALT);
+    const encodedToken = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.verify(encodedToken, OWN_SALT);
+    req.userAuthData = {
+      userId: decodedToken.userId,
+      name: decodedToken.name,
+      email: decodedToken.email,
+      roleId: decodedToken.roleId,
+      acclvl: decodedToken.acclvl
+    };
     next();
   } catch (err) {
     console.error(err);
     return res.status(401).json({
       msgId: "FAILED",
-      msgDescr: "FAILED: unauthorized.",
+      msgDescr: "FAILED: unauthorized; invalid email and/or password.",
       data: null
     });
   }

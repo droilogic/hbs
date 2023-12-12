@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 // import schemas, models
 const User = require("../models/user");
 const Role = require("../models/role");
+const { filter } = require("rxjs");
 
 // get environment variables
 const OWN_SALT = process.env.OWN_SALT;
@@ -58,7 +59,7 @@ router.post("/signin", (req, res, next) => {
 
   // check if user exists
   User.findOne({ email: req.body.email }).then(user => {
-    // console.log("AuthService.post.signin> user: " + JSON.stringify(user));
+    console.log("AuthService.post.signin> user: " + JSON.stringify(user));
     // data OK
     if (!user) {
       // user does not exist
@@ -132,6 +133,46 @@ router.post("/signin", (req, res, next) => {
 });
 
 
+// PUT (user edit route)
+router.put("/:id", (req, res, next) => {
+  console.log("<AuthService.edit> email: " + req.body.email + ", pwd: " + req.body.pwd + ", role: " + req.body.role_id + ", rv: " + req.body.rv);
+  // data OK
+
+  const currrv = parseInt(req.body.rv);
+  const newrv = currrv + 1;
+  console.log("<AuthService.edit> newrv: ", newrv);
+
+  bcrypt
+    .hash(req.body.pwd, 10)
+    .then(hash => {
+      const user = new User({
+        _id: req.body.id,
+        rv: newrv,
+        email: req.body.email,
+        password: hash,
+        role_id: req.body.role_id,
+        name: req.body.name,
+        phone: req.body.phone,
+        comments: req.body.comments
+      });
+
+      console.log("AuthService.edit.put.user: " + user);
+      let filter = {}
+      filter["_id"] = {"$eq": req.body.id};
+      filter["rv"] = {"$eq": currrv};
+
+      User.updateOne(filter, user).then(result => {
+        console.log(result);
+        res.status(200).json({
+          msgId: "UPDATED",
+          msgDescr: "UPDATED " + user._id,
+          data: user._id
+        });
+      });
+    });
+});
+
+
 
 // GET
 router.get("", (req, res, next) => {
@@ -161,7 +202,42 @@ router.get("", (req, res, next) => {
       data: resultset
     });
   });
+});
 
+
+// GET
+router.get("/:id", (req, res, next) => {
+  // handling pagination
+  // hint: plus sign converts strings to numbers(!)
+  let resultset;
+  const pgSize = +req.query.ps;
+  const currPage = +req.query.pg;
+
+  let filter = {};
+  filter["_id"] = {"$eq": req.params.id};
+  // console.log("findOne filter: " + JSON.stringify(filter));
+
+  const query = User.findOne(filter);
+  if (pgSize && currPage) {
+    // make sure both variables have valid values
+    query.skip(pgSize * (currPage - 1)).limit(pgSize);
+  }
+
+  query
+  .then(docs => {
+    // store returned rows
+    resultset = docs;
+    return 1;
+  })
+  .then(cnt => {
+    // INFO: send response goes here since this is an async call
+    res.status(200).json({
+      msgId: "OK",
+      msgDescr: "OK",
+      cnt: cnt,
+      data: resultset
+    });
+  });
 });
 
 

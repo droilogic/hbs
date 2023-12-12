@@ -1,0 +1,39 @@
+<h3>User</h3>
+<mat-card>
+
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+
+  <form [formGroup]="form" (submit)="onSaveUser()" *ngIf="!isLoading">
+    <mat-form-field>
+      <mat-label>E-mail:</mat-label>
+      <input matInput type="email" name="email" formControlName="email" placeholder="E-mail">
+      <mat-error *ngIf="form.get('email').invalid">E-mail cannot be empty</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Password:</mat-label>
+      <input matInput type="password" name="password" formControlName="password" placeholder="Password">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Role</mat-label>
+      <mat-select matNativeControl name="role_id" formControlName="role_id" required>
+        <mat-option value="655c9c445f499d684d2079ba">Guest</mat-option>
+        <mat-option value="655c9bfc5f499d684d2079b9">Plain user</mat-option>
+        <mat-option value="655c9b3e5f499d684d2079b8">Administrator</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Name:</mat-label>
+      <input matInput type="text" name="name" formControlName="name" placeholder="name">
+      <mat-error *ngIf="form.get('name').invalid">Name cannot be empty</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Phone:</mat-label>
+      <input matInput type="text" name="phone" formControlName="phone" placeholder="Phone">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Comments:</mat-label>
+      <textarea matInput name="comments" rows="3" formControlName="comments" placeholder="Comments"></textarea>
+    </mat-form-field>
+    <button mat-raised-button color="accent" type="submit">Save</button>
+  </form>
+</mat-card>

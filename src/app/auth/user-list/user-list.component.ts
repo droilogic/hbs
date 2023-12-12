@@ -2,37 +2,35 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Subscription } from 'rxjs';
 
-import { Hotel } from 'src/app/interfaces/hotel';
-import { HotelService } from '../hotel.service';
+import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
-  selector: 'app-hotel-list',
-  templateUrl: './hotel-list.component.html',
-  styleUrls: ['./hotel-list.component.css']
+  selector: 'app-user-list',
+  templateUrl: './user-list.component.html',
+  styleUrls: ['./user-list.component.css']
 })
-export class HotelListComponent implements OnInit, OnDestroy {
-  hotels: Hotel[] = [];
-  totalHotels = 0;
-  hotelsPerPage = 2;
+export class UserListComponent implements OnInit, OnDestroy {
+  users: User[] = [];
+  totalUsers = 0;
+  usersPerPage = 2;
   currPage = 1;
   pageSizeOptions = [2, 3, 5];
   isLoading = false;
   userAuthenticated = false;
   userLevel = 999;
-  private hotelSubscription: Subscription;
+  private userSubscription: Subscription;
   private authStatusSubscription: Subscription;
 
-
-  constructor(public hotelService: HotelService, private authService: AuthService) {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
     this.isLoading = true;
-    this.hotelService.getHotels(this.hotelsPerPage, this.currPage);
-    this.hotelSubscription = this.hotelService.getHotelUpdateListener().subscribe((hotelData: { hotels: Hotel[], rc: number }) => {
+    this.authService.getUsers(this.usersPerPage, this.currPage);
+    this.userSubscription = this.authService.getUserUpdateListener().subscribe((userData: { users: User[], rc: number }) => {
       this.isLoading = false;
-      this.hotels = hotelData.hotels;
-      this.totalHotels = hotelData.rc;
+      this.users = userData.users;
+      this.totalUsers = userData.rc;
     });
     // this is required to properly reflect authentication status
     // when accessing this page for the first time
@@ -46,15 +44,13 @@ export class HotelListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.hotelSubscription.unsubscribe();
+    this.userSubscription.unsubscribe();
     this.authStatusSubscription.unsubscribe();
   }
 
-  onDelete(hotelId: string) {
-    this.hotelService.deleteHotel(hotelId).subscribe(() => {
-      this.hotelService.getHotels(this.hotelsPerPage, this.currPage);
-    }, () => {
-      this.isLoading = false;
+  onDelete(userId: string) {
+    this.authService.deleteUser(userId).subscribe(() => {
+      this.authService.getUsers(this.usersPerPage, this.currPage);
     });
   }
 
@@ -62,8 +58,8 @@ export class HotelListComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     // pageIndex is zero based
     this.currPage = evt.pageIndex + 1;
-    this.hotelsPerPage = evt.pageSize;
-    this.hotelService.getHotels(this.hotelsPerPage, this.currPage);
+    this.usersPerPage = evt.pageSize;
+    this.authService.getUsers(this.usersPerPage, this.currPage);
   }
 
 }

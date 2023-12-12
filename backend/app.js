@@ -10,6 +10,7 @@ const moment = require("moment");
 const employeeRoutes = require('./routes/employees');
 const hotelRoutes = require('./routes/hotels');
 const userRoutes = require("./routes/auth");
+const bookingRoutes = require("./routes/bookings");
 
 // main app
 const app = express();
@@ -64,6 +65,7 @@ app.use((req, res, next) => {
 app.use("/api/employees", employeeRoutes);
 app.use("/api/hotels", hotelRoutes);
 app.use("/api/auth", userRoutes);
+app.use("/api/bookings", bookingRoutes);
 
 // returns current date/time
 function now() {

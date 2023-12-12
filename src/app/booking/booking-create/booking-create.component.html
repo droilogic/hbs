@@ -1,0 +1,71 @@
+<h3>NEW Booking</h3>
+<mat-card>
+
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+
+  <form [formGroup]="form" (submit)="onSaveBooking()" *ngIf="!isLoading">
+
+    <mat-label><span>User: {{ userDisplayData }}</span></mat-label>
+    <mat-form-field>
+      <mat-label>Hotel</mat-label>
+      <mat-select matNativeControl name="hotel_id" formControlName="hotel_id" required>
+        <mat-option value="655c9c445f499d684d2079ba">Hotel 1</mat-option>
+        <mat-option value="655c9bfc5f499d684d2079b9">Hotel 2</mat-option>
+        <mat-option value="655c9b3e5f499d684d2079b8">Hotel 3</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Guest Name:</mat-label>
+      <input matInput type="text" name="guest_name" formControlName="guest_name" placeholder="guest fullname">
+      <mat-error *ngIf="form.get('guest_name').invalid">Guest name cannot be empty!</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Guest e-mail:</mat-label>
+      <input matInput type="email" name="guest_email" formControlName="guest_email" placeholder="guest e-mail">
+      <mat-error *ngIf="form.get('guest_email').invalid">Guest e-mail cannot be empty!</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Guest Address:</mat-label>
+      <input matInput type="text" name="guest_address" formControlName="guest_address" placeholder="guest address">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Guest Phone:</mat-label>
+      <input matInput type="text" name="guest_phone" formControlName="guest_phone" placeholder="guest phone">
+      <mat-error *ngIf="form.get('guest_phone').invalid">Guest phone cannot be empty!</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Room:</mat-label>
+      <input matInput type="text" name="room" formControlName="room" placeholder="room">
+      <mat-error *ngIf="form.get('room').invalid">Room cannot be empty!</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Persons:</mat-label>
+      <input matInput type="number" name="persons" formControlName="persons" placeholder="persons">
+      <mat-error *ngIf="form.get('persons').invalid">Invalid number of persons!</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Check-In:</mat-label>
+      <input matInput type="date" name="checkin" formControlName="checkin" placeholder="checkin">
+      <mat-error *ngIf="form.get('checkin').invalid">Invalid check-in date!</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Check-Out:</mat-label>
+      <input matInput type="date" name="checkout" formControlName="checkout" placeholder="checkout">
+      <mat-error *ngIf="form.get('checkout').invalid">Invalid check-out date!</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Price (per night):</mat-label>
+      <input matInput type="number" name="price" formControlName="price" placeholder="price">
+      <mat-error *ngIf="form.get('price').invalid">Invalid price per night!</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Comments:</mat-label>
+      <textarea matInput name="comments" rows="3" formControlName="comments" placeholder="Comments"></textarea>
+    </mat-form-field>
+    <button mat-raised-button color="accent" type="submit">Save</button>
+  </form>
+</mat-card>

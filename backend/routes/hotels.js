@@ -48,11 +48,19 @@ router.post("", authCheck, multer({storage: storage}).single("image"), (req, res
     owner_id: "",
     comments: req.body.comments
   });
-  hotel.save().then(hotel => {
-    res.status(201).json({
-      msgId: "ADDED",
-      msgDescr: "ADDED " + hotel._id,
-      data: hotel
+  hotel.save()
+    .then(hotel => {
+      res.status(201).json({
+        msgId: "ADDED",
+        msgDescr: "ADDED " + hotel._id,
+        data: hotel
+      });
+    })
+    .catch(err => {
+      res.status(500).json({
+        msgId: "FAILED",
+        msgDescr: "FAILED: Unable to save object <" + hotel._id + ">",
+        data: hotel
     });
   });
 
@@ -93,14 +101,30 @@ router.put("/:id", authCheck, multer({storage: storage}).single("image"), (req, 
   filter["_id"] = {"$eq": req.body.id};
   filter["rv"] = {"$eq": currrv};
 
-  Hotel.updateOne(filter, hotel).then(result => {
-    console.log(result);
-    res.status(200).json({
-      msgId: "UPDATED",
-      msgDescr: "UPDATED " + hotel._id,
-      data: hotel._id
+  Hotel.updateOne(filter, hotel)
+    .then(result => {
+      console.log(result);
+      if (result.nModified > 0) {
+        res.status(200).json({
+          msgId: "UPDATED",
+          msgDescr: "UPDATED " + hotel._id,
+          data: hotel._id
+        });
+      } else {
+        res.status(401).json({
+          msgId: "FAILED",
+          msgDescr: "FAILED: Unable to update object <" + hotel._id + ">",
+          data: null
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({
+      msgId: "FAILED",
+      msgDescr: "FAILED: Unable to update object <" + hotel._id + ">",
+      data: null
     });
-  })
+  });
 });
 
 
@@ -110,13 +134,30 @@ router.delete("/:id", authCheck, (req, res, next) => {
   Hotel.deleteOne({ _id: id })
     .then(result => {
       console.log(result);
-      console.log("hotel deleted");
-      res.status(200).json({
-        msgId: "DELETED",
-        msgDescr: "DELETED " + id,
-        data: id
-      });
+      if (result.deletedCount > 0) {
+        console.log("hotel deleted");
+        res.status(200).json({
+          msgId: "DELETED",
+          msgDescr: "DELETED " + id,
+          data: id
+        });
+      } else {
+        console.log("hotel NOT deleted!");
+        res.status(200).json({
+          msgId: "FAILED",
+          msgDescr: "FAILED: Unable to locate object <" + id + ">.",
+          data: null
+        });
+      }
+
+    })
+    .catch(err => {
+      res.status(500).json({
+      msgId: "FAILED",
+      msgDescr: "FAILED: Unable to delete object <" + id + ">",
+      data: null
     });
+  });
 });
 
 // GET
@@ -133,42 +174,55 @@ router.get("", (req, res, next) => {
   }
 
   query
-  .then(docs => {
-    // store returned rows
-    resultset = docs;
-    return Hotel.countDocuments();
-  })
-  .then(cnt => {
-    // INFO: send response goes here since this is an async call
-    res.status(200).json({
-      msgId: 'OK',
-      msgDescr: 'OK',
-      cnt: cnt,
-      data: resultset
+    .then(docs => {
+      // store returned rows
+      resultset = docs;
+      return Hotel.countDocuments();
+    })
+    .then(cnt => {
+      // INFO: send response goes here since this is an async call
+      res.status(200).json({
+        msgId: 'OK',
+        msgDescr: 'OK',
+        cnt: cnt,
+        data: resultset
+      });
+    })
+    .catch(err => {
+      res.status(404).json({
+      msgId: "NOT_FOUND",
+      msgDescr: "NOT_FOUND: Unable to retrieve objects!",
+      data: hotel
     });
   });
-
 });
 
 
 // GET
 router.get("/:id", (req, res, next) => {
-  Hotel.findById(req.params.id).then(doc => {
-
-    // INFO: send response goes here since this is an async call
-    if (doc) {
-      res.status(200).json({
-        msgId: 'OK',
-        msgDescr: 'OK',
-        data: doc
-      });
-    } else {
-      res.status(404).json({
-        msgId: 'NOT_FOUND',
-        msgDescr: 'Hotel not found',
-        data: null
-      });
-    }
+  Hotel.findById(req.params.id)
+    .then(doc => {
+      // INFO: send response goes here since this is an async call
+      if (doc) {
+        res.status(200).json({
+          msgId: 'OK',
+          msgDescr: 'OK',
+          data: doc
+        });
+      } else {
+        res.status(404).json({
+          msgId: "NOT_FOUND",
+          msgDescr: "NOT_FOUND: Hotel <" + req.params.id + "> not found!",
+          data: null
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({
+      msgId: "NOT_FOUND",
+      msgDescr: "NOT_FOUND: Hotel <" + req.params.id + "> not found!",
+      data: null
+    });
   });
 
 });

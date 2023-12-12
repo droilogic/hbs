@@ -1,8 +1,16 @@
 export interface Booking {
-  id:number;
-	room_id:number;
-	client_id:number;
-	dt_checkin:number;
-	dt_checkout:number;
-	occupants:number;
+  id: string;
+	rv: number;
+	user_id: string;
+	hotel_id: string;
+	guest_name: string;
+	guest_email: string;
+	guest_address: string;
+	guest_phone: string;
+	room: string;
+	persons: number;
+	checkin: number;
+	checkout: number;
+	price: number;
+	comments: string;
 }
