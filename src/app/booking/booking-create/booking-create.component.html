@@ -9,11 +9,17 @@
     <mat-form-field>
       <mat-label>Hotel</mat-label>
       <mat-select matNativeControl name="hotel_id" formControlName="hotel_id" required>
+        <mat-option *ngFor="let hotel of hotels" [value]="hotel.id">{{ hotel.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <!-- <mat-form-field>
+      <mat-label>Hotel</mat-label>
+      <mat-select matNativeControl name="hotel_id" formControlName="hotel_id" required>
         <mat-option value="655c9c445f499d684d2079ba">Hotel 1</mat-option>
         <mat-option value="655c9bfc5f499d684d2079b9">Hotel 2</mat-option>
         <mat-option value="655c9b3e5f499d684d2079b8">Hotel 3</mat-option>
       </mat-select>
-    </mat-form-field>
+    </mat-form-field> -->
 
     <mat-form-field>
       <mat-label>Guest Name:</mat-label>

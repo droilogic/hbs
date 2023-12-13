@@ -61,6 +61,8 @@ export class HotelService {
   }
 
   addHotel(hotel: Hotel, img: File) {
+    console.log("HotelService.addHotel.hotel: " + JSON.stringify(hotel));
+    // data OK
     const hotelData = new FormData();
     hotelData.append("name", hotel.name);
     hotelData.append("email", hotel.email);
@@ -70,7 +72,7 @@ export class HotelService {
     hotelData.append("comments", hotel.comments);
     hotelData.append("image", img, hotel.name);
 
-    console.log("addHotel.hotelData: " + hotelData);
+    console.log("HotelService.addHotel.hotelData: " + JSON.stringify(hotelData));
 
     this.http.post<{
       msgId: string,

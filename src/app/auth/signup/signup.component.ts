@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { AuthService } from '../auth.service';
 import { User } from 'src/app/interfaces/user';
@@ -17,7 +18,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   userDefaultRole = "655c9c445f499d684d2079ba";   // default role is Guest
   userCreated = false;
 
-  constructor (public authService: AuthService) {}
+  constructor (public route: ActivatedRoute, private router: Router, public authService: AuthService) {}
 
   ngOnInit(): void {
     this.userLevel = this.authService.getAuthUserAccLvl();
@@ -38,21 +39,30 @@ export class SignupComponent implements OnInit, OnDestroy {
       return;
     }
     this.isLoading = true;
+    // takes care of role_id when disabled
+    // ie: signing up as new user
+    let formRoleId = form.value.role_id;
+    if (!formRoleId) {
+      formRoleId = this.userDefaultRole;
+    }
 
     const user = {
       rv: 0,
       email: form.value.email,
       pwd: form.value.password,
-      role_id: form.value.role_id,
+      role_id: formRoleId,
       name: form.value.name,
       phone: form.value.phone,
       comments: form.value.comments
     } as User;
 
-    // console.log("SignupComponent.onSignUp.user: " + JSON.stringify(user));
+    console.log("SignupComponent.onSignUp.user: " + JSON.stringify(user));
     // data OK
 
     this.authService.addUser(user);
     this.userCreated = true;
+    this.isLoading = false;
+    console.log("signup-component.onSaveUser.onSignUp(): " + JSON.stringify(user));
+    form.reset();
   }
 }

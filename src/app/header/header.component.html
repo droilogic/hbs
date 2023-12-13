@@ -18,12 +18,12 @@
   <mat-menu #staff="matMenu">
     <button mat-menu-item [matMenuTriggerFor]="auth">Authentication</button>
     <button *ngIf="userAuthenticated && userAccLvl < 10" mat-menu-item [matMenuTriggerFor]="users">Users</button>
-    <button *ngIf="false" mat-menu-item [matMenuTriggerFor]="managers">Managers</button>
-    <button *ngIf="false" mat-menu-item [matMenuTriggerFor]="guests">Guests</button>
+    <!-- <button *ngIf="false" mat-menu-item [matMenuTriggerFor]="managers">Managers</button>
+    <button *ngIf="false" mat-menu-item [matMenuTriggerFor]="guests">Guests</button> -->
     <hr>
     <button mat-menu-item [matMenuTriggerFor]="hotels">Hotels</button>
-    <button *ngIf="false" mat-menu-item [matMenuTriggerFor]="employees">Rooms</button>
-    <button *ngIf="false" mat-menu-item [matMenuTriggerFor]="employees">Room Classes</button>
+    <!-- <button *ngIf="false" mat-menu-item [matMenuTriggerFor]="employees">Rooms</button>
+    <button *ngIf="false" mat-menu-item [matMenuTriggerFor]="employees">Room Classes</button> -->
     <hr *ngIf="userAuthenticated && userAccLvl < 999">
     <button *ngIf="userAuthenticated && userAccLvl < 999" mat-menu-item [matMenuTriggerFor]="bookings">Bookings</button>
   </mat-menu>

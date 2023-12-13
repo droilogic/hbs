@@ -65,27 +65,54 @@ export class BookingService {
   }
 
   addBooking(booking: Booking) {
-    const bookingData = new FormData();
-    bookingData.append("user_id", booking.user_id);
-    bookingData.append("hotel_id", booking.hotel_id);
-    bookingData.append("guest_name", booking.guest_name);
-    bookingData.append("guest_email", booking.guest_email);
-    bookingData.append("guest_address", booking.guest_address);
-    bookingData.append("guest_phone", booking.guest_phone);
-    bookingData.append("room", "" + booking.room);
-    bookingData.append("persons", "" + booking.persons);
-    bookingData.append("checkin", "" + booking.checkin);
-    bookingData.append("checkout", "" + booking.checkout);
-    bookingData.append("price", "" + booking.price);
-    bookingData.append("comments", booking.comments);
+    console.log("BookingService.addBooking.booking: " + JSON.stringify(booking));
+    // data OK
+    // const bookingData = new FormData();
+    // bookingData.append("user_id", booking.user_id);
+    // bookingData.append("hotel_id", booking.hotel_id);
+    // bookingData.append("guest_name", booking.guest_name);
+    // bookingData.append("guest_email", booking.guest_email);
+    // bookingData.append("guest_address", booking.guest_address);
+    // bookingData.append("guest_phone", booking.guest_phone);
+    // bookingData.append("room", "" + booking.room);
+    // bookingData.append("persons", "" + booking.persons);
+    // bookingData.append("checkin", "" + booking.checkin);
+    // bookingData.append("checkout", "" + booking.checkout);
+    // bookingData.append("price", "" + booking.price);
+    // bookingData.append("comments", booking.comments);
 
-    console.log("addBooking.bookingData: " + bookingData);
+    const newBooking = {
+      id: "",
+      rv: 0,
+      user_id: booking.user_id,
+      hotel_id: booking.hotel_id,
+      guest_name: booking.guest_name,
+      guest_email: booking.guest_email,
+      guest_address: booking.guest_address,
+      guest_phone: booking.guest_phone,
+      room: booking.room,
+      persons: booking.persons,
+      checkin: booking.checkin,
+      checkout: booking.checkout,
+      price: booking.price,
+      comments: booking.comments
+    } as Booking;
+
+
+    // log formdata
+    // let bkData = "[";
+    // bookingData.forEach((val, key) => {
+    //   bkData += "(" + key + ', ' + val + ") ";
+    // });
+    // bkData += "]";
+    // console.log("BookingService.addBooking.bookingData: " + bkData);
+    // data OK
 
     this.http.post<{
       msgId: string,
       msgDescr: string,
       data: Booking
-    }>("http://localhost:3333/api/bookings", bookingData).subscribe((responseData) => {
+    }>("http://localhost:3333/api/bookings", newBooking).subscribe((responseData) => {
       // using angular router to navigate to another page
       this.router.navigate(["/booking-list"]);
     });

@@ -37,6 +37,9 @@ router.post("", authCheck, multer({storage: storage}).single("image"), (req, res
   // our server URL
   const url = req.protocol + "://" + req.get("host");
 
+  console.log("hotel.router.post>req.body: " + JSON.stringify(req.body));
+  // data OK
+
   const hotel = Hotel({
     rv: 0,
     name: req.body.name,

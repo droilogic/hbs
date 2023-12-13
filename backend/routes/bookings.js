@@ -14,6 +14,9 @@ const router = express.Router();
 
 // POST
 router.post("", authCheck, (req, res, next) => {
+  console.log("booking.router.post>req.body: " + JSON.stringify(req.body));
+  // data ERROR
+
   const booking = Booking({
     rv: 0,
     user_id: req.body.user_id,
@@ -29,6 +32,8 @@ router.post("", authCheck, (req, res, next) => {
     price: req.body.price,
     comments: req.body.comments
   });
+  console.log("booking.router.post>bookingData: " + JSON.stringify(booking));
+  // data UNKNOWN
   booking.save().then(booking => {
     res.status(201).json({
       msgId: "ADDED",

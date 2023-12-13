@@ -128,8 +128,10 @@ export class AuthService {
       // using angular router to navigate to another page
       console.log(responseData);
       
-      this.router.navigate(["/signup"]);
+      // this.router.navigate(["/signup"]);
     }, err => {
+      console.log("AuthService.addUser API_ERROR: " + err);
+      
       this.authStatusListener.next(false);
     });
   }

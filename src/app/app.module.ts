@@ -32,6 +32,7 @@ import { UserListComponent } from './auth/user-list/user-list.component';
 import { UserCreateComponent } from './auth/user-create/user-create.component';
 import { ErrorInterceptor } from './error.interceptor';
 import { ErrorComponent } from './error/error.component';
+import { BookingListComponent } from './booking/booking-list/booking-list.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { ErrorComponent } from './error/error.component';
     BookingCreateComponent,
     UserListComponent,
     UserCreateComponent,
-    ErrorComponent
+    ErrorComponent,
+    BookingListComponent
   ],
   imports: [
     BrowserModule,

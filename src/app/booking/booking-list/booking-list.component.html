@@ -1,0 +1,32 @@
+<h3>Bookings List</h3>
+
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+
+<mat-accordion multi="true" *ngIf="bookings.length > 0 && !isLoading && userId != ''">
+  <mat-expansion-panel *ngFor="let booking of bookings">
+    <mat-expansion-panel-header>
+      {{ booking.id }}
+    </mat-expansion-panel-header>
+    <p>user: {{ userName + " (" + booking.user_id + ")" }}</p>
+    <p *ngIf="userLevel < 10">rv: {{ booking.rv }}</p>
+    <p>hotel: {{ booking.hotel_id }}</p>
+    <p>guest name: {{ booking.guest_name }}</p>
+    <p>guest email: {{ booking.guest_email }}</p>
+    <p>room: {{ booking.room }}</p>
+    <p>persons: {{ booking.persons }}</p>
+    <p>checkin: {{ booking.checkin }}</p>
+    <p>checkout: {{ booking.checkout }}</p>
+    <p>comments: {{ booking?.comments }}</p>
+    <mat-action-row *ngIf="(userAuthenticated && userLevel < 10) || userId == booking.user_id">
+      <a mat-button color="primary" [routerLink]="['/booking-edit', booking.id]" >UPDATE</a>
+      <button mat-button color="warn" (click)="onDelete(booking.id)">DELETE</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>
+<mat-paginator
+  [length]="totalBookings"
+  [pageSize]="bookingsPerPage"
+  [pageSizeOptions]="pageSizeOptions"
+  (page)="onPageChange($event)"
+  *ngIf="bookings.length > 0"></mat-paginator>
+<p class="info-text mat-body-1" *ngIf="bookings.length <= 0 && !isLoading">No bookings defined!</p>

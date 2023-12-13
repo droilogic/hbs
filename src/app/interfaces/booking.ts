@@ -9,8 +9,8 @@ export interface Booking {
 	guest_phone: string;
 	room: string;
 	persons: number;
-	checkin: number;
-	checkout: number;
+	checkin: Date;
+	checkout: Date;
 	price: number;
 	comments: string;
 }

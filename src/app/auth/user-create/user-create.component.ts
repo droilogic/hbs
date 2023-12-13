@@ -110,25 +110,27 @@ export class UserCreateComponent implements OnInit {
         phone: this.form.value.phone,
         comments: this.form.value.comments
       };
+      console.log("user-create-component.onSaveUser.addUser(" + this.opMode + "): " + JSON.stringify(newUser));
       this.authService.addUser(newUser);
+      console.log("user-create-component.onSaveUser, redirecting to /signup");
+      this.router.navigate(["/signup"]);
     } else if (this.opMode === "edit") {
       const newUser = {
         id: this.userId,
         rv: this.user.rv,
         email: this.form.value.email,
-        pwd: "",  // todo: password reset form implementation
+        pwd: this.form.value.password,
         role_id: this.form.value.role_id,
         name: this.form.value.name,
         phone: this.form.value.phone,
         comments: this.form.value.comments
       };
 
-      console.log("user-create-component.onSaveUser.newUser(" + this.opMode + "): " + JSON.stringify(newUser));
-      
+      console.log("user-create-component.onSaveUser.addUser(" + this.opMode + "): " + JSON.stringify(newUser));
       this.authService.updateUser(newUser);
     }
     // clear the form
-    this.form.reset();
+    // this.form.reset();
   }
 
 }

@@ -11,14 +11,15 @@ import { SigninComponent } from "./auth/signin/signin.component";
 import { SignupComponent } from "./auth/signup/signup.component";
 import { UserListComponent } from "./auth/user-list/user-list.component";
 import { UserCreateComponent } from "./auth/user-create/user-create.component";
+import { BookingListComponent } from "./booking/booking-list/booking-list.component";
 
 const routes: Routes = [
   { path: 'hotel-list', component: HotelListComponent },
   { path: 'hotel-create', component: HotelCreateComponent, canActivate: [authAdminGuard] },
   { path: 'hotel-edit/:hotelid', component: HotelCreateComponent, canActivate: [authAdminGuard] },
-  { path: 'booking-list', component: HotelListComponent, canActivate: [authAdminGuard] },
+  { path: 'booking-list', component: BookingListComponent },
   { path: 'booking-create', component: BookingCreateComponent, canActivate: [authAdminGuard] },
-  { path: 'booking-edit/:bookingid', component: HotelCreateComponent, canActivate: [authAdminGuard] },
+  { path: 'booking-edit/:bookingid', component: BookingCreateComponent, canActivate: [authAdminGuard] },
   // { path: 'emp-list', component: EmployeeListComponent, canActivate: [authAdminGuard] },
   // { path: 'emp-create', component: EmployeeCreateComponent, canActivate: [authAdminGuard] },
   // { path: 'emp-edit/:empid', component: EmployeeCreateComponent, canActivate: [authAdminGuard] },
