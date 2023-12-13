@@ -16,6 +16,7 @@ import { HotelService } from '../../hotel/hotel.service';
 })
 export class BookingListComponent implements OnInit, OnDestroy {
   bookings: Booking[] = [];
+  bookings_alt = [];
   totalBookings = 0;
   bookingsPerPage = 2;
   currPage = 1;
@@ -52,6 +53,8 @@ export class BookingListComponent implements OnInit, OnDestroy {
     this.hotelService.getHotels(10, 1);
     this.hotelSubscription = this.hotelService.getHotelUpdateListener().subscribe((hotelData: { hotels: Hotel[], rc: number }) => {
       this.hotels = hotelData.hotels;
+      // console.log("booking-list-component.ngOnInit> hotels: " + JSON.stringify(this.hotels));
+      // console.log("booking-list-component.ngOnInit> hotel[655c6677a50fccbf41c7c8a8]: " + JSON.stringify(this.hotels.filter(hotel => { return hotel.id == "655c6677a50fccbf41c7c8a8" })));
     });
 
     this.bookingService.getBookings(this.bookingsPerPage, this.currPage);
@@ -60,10 +63,17 @@ export class BookingListComponent implements OnInit, OnDestroy {
       this.bookings = bookingData.bookings;
       this.totalBookings = bookingData.rc;
 
+      this.bookings_alt = [...this.bookings];
+
       this.userAuthenticated = this.authService.getAuthStatus();
       this.userId = this.authService.getAuthUserId();
       this.userName = this.authService.getAuthUserName();
       this.userLevel = this.authService.getAuthUserAccLvl();
+
+      this.bookings_alt.forEach((item, idx, obj) => {
+        const objHotel2 = this.hotels.find(o => o.id == item.hotel_id);
+        obj[idx]["hotel_name"] = objHotel2.name;
+      });
 
     });
 }

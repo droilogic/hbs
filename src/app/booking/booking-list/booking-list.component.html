@@ -2,14 +2,14 @@
 
 <mat-spinner *ngIf="isLoading"></mat-spinner>
 
-<mat-accordion multi="true" *ngIf="bookings.length > 0 && !isLoading && userId != ''">
-  <mat-expansion-panel *ngFor="let booking of bookings">
+<mat-accordion multi="true" *ngIf="bookings_alt.length > 0 && !isLoading && userId != ''">
+  <mat-expansion-panel *ngFor="let booking of bookings_alt">
     <mat-expansion-panel-header>
       {{ booking.id }}
     </mat-expansion-panel-header>
     <p>user: {{ userName + " (" + booking.user_id + ")" }}</p>
     <p *ngIf="userLevel < 10">rv: {{ booking.rv }}</p>
-    <p>hotel: {{ booking.hotel_id }}</p>
+    <p>hotel: <strong>{{ booking.hotel_name }}</strong>{{ " (" + booking.hotel_id + ")" }}</p>
     <p>guest name: {{ booking.guest_name }}</p>
     <p>guest email: {{ booking.guest_email }}</p>
     <p>room: {{ booking.room }}</p>

@@ -56,6 +56,16 @@ export class HotelService {
     }>("http://localhost:3333/api/hotels/" + hotelid);
   }
 
+  getHotelNameById(hotelid: string) {
+
+    const hotel = this.http.get<{
+      msgId: string,
+      msgDescr: string,
+      data: any
+    }>("http://localhost:3333/api/hotels/" + hotelid);
+    return hotel;
+  }
+
   getHotelUpdateListener() {
     return this.hotelsUpdated.asObservable();
   }
